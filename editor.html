@@ -1,0 +1,2482 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="theme-color" content="#1B3A6B" />
+  <title>Resume Editor — BanaoCV</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231B3A6B'/><text x='16' y='23' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='900' font-size='18'>R</text></svg>" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/animations.css" />
+  <link rel="stylesheet" href="assets/css/mobile.css" />
+  <style>
+    /* ══════════════════════════════════════
+       EDITOR LAYOUT
+    ══════════════════════════════════════ */
+    body { background: var(--bg); }
+
+    .editor-shell {
+      display: grid;
+      grid-template-columns: 320px 1fr 340px;
+      grid-template-rows: 1fr;
+      height: calc(100vh - var(--nav-h));
+      overflow: hidden;
+    }
+
+    @media (max-width: 1200px) {
+      .editor-shell { grid-template-columns: 280px 1fr; }
+      .editor-right-panel { display: none; }
+    }
+    @media (max-width: 900px) {
+      .editor-shell { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+      .editor-left-panel { display: none; }
+    }
+
+    /* ── Left Panel ── */
+    .editor-left-panel {
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .left-panel-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .left-tab {
+      flex: 1;
+      padding: 14px 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-3);
+      border: none;
+      background: none;
+      cursor: pointer;
+      transition: all var(--t);
+      border-bottom: 2px solid transparent;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .left-tab .tab-icon { font-size: 1rem; }
+    .left-tab:hover { color: var(--brand); background: var(--bg); }
+    .left-tab.active {
+      color: var(--brand);
+      border-bottom-color: var(--brand);
+      background: var(--brand-xlight);
+    }
+
+    .left-panel-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0;
+    }
+
+    /* Tab panels */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Form sections ── */
+    .form-section {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .form-section-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-3);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .form-section-title .icon { font-size: 0.875rem; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .form-row.full { grid-template-columns: 1fr; }
+
+    .editor-input {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      font-size: 0.8125rem;
+      color: var(--text);
+      font-family: var(--font-body);
+      transition: all var(--t);
+      background: var(--white);
+      resize: none;
+    }
+    .editor-input:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(27,58,107,0.07);
+      outline: none;
+    }
+    .editor-input::placeholder { color: var(--text-4); font-size: 0.8rem; }
+
+    .editor-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-3);
+      margin-bottom: 5px;
+    }
+
+    /* Add entry button */
+    .add-entry-btn {
+      width: 100%;
+      padding: 8px;
+      border: 1.5px dashed var(--border);
+      border-radius: var(--r);
+      font-size: 0.8rem;
+      color: var(--text-3);
+      cursor: pointer;
+      transition: all var(--t);
+      background: none;
+      text-align: center;
+      margin-top: 8px;
+    }
+    .add-entry-btn:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+      background: var(--brand-xlight);
+    }
+
+    /* Entry card */
+    .entry-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      position: relative;
+    }
+    .entry-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .entry-card-title {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--brand-dark);
+    }
+    .entry-delete {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: none;
+      border: none;
+      color: var(--text-4);
+      cursor: pointer;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--t);
+    }
+    .entry-delete:hover { background: var(--error-light); color: var(--error); }
+
+    /* Skills tags input */
+    .skills-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 8px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      min-height: 40px;
+      cursor: text;
+      transition: border-color var(--t);
+    }
+    .skills-tags:focus-within { border-color: var(--brand); }
+    .skill-tag {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--brand-xlight);
+      color: var(--brand);
+      border: 1px solid rgba(27,58,107,0.15);
+      border-radius: var(--r-full);
+      padding: 3px 8px 3px 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .skill-tag-remove {
+      background: none;
+      border: none;
+      color: var(--brand);
+      cursor: pointer;
+      font-size: 0.75rem;
+      padding: 0;
+      line-height: 1;
+      opacity: 0.6;
+      transition: opacity var(--t);
+    }
+    .skill-tag-remove:hover { opacity: 1; }
+    .skill-tag-input {
+      border: none;
+      outline: none;
+      font-size: 0.8rem;
+      font-family: var(--font-body);
+      min-width: 80px;
+      flex: 1;
+      background: transparent;
+      color: var(--text);
+    }
+
+    /* AI Hindi input */
+    .ai-hindi-box {
+      background: linear-gradient(135deg, var(--brand-xlight), var(--gold-xlight));
+      border: 1.5px solid rgba(27,58,107,0.15);
+      border-radius: var(--r-lg);
+      padding: 14px;
+      margin: 12px 16px;
+    }
+    .ai-hindi-box-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--brand);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ai-hindi-textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid rgba(27,58,107,0.15);
+      border-radius: var(--r);
+      font-size: 0.8rem;
+      font-family: var(--font-body);
+      resize: none;
+      height: 80px;
+      background: var(--white);
+      color: var(--text);
+      transition: border-color var(--t);
+    }
+    .ai-hindi-textarea:focus {
+      outline: none;
+      border-color: var(--brand);
+    }
+
+    /* ── Middle — Resume Canvas ── */
+    .editor-canvas-wrap {
+      overflow-y: auto;
+      background: #e8edf5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px;
+      gap: 16px;
+      position: relative;
+    }
+
+    /* Toolbar */
+    .canvas-toolbar {
+      width: 100%;
+      max-width: 680px;
+      background: var(--white);
+      border-radius: var(--r-lg);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .toolbar-divider {
+      width: 1px;
+      height: 20px;
+      background: var(--border);
+      margin: 0 4px;
+    }
+    .toolbar-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: var(--r-sm);
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--t);
+      font-weight: 600;
+    }
+    .toolbar-btn:hover { background: var(--bg); color: var(--brand); }
+    .toolbar-btn.active { background: var(--brand-xlight); color: var(--brand); }
+
+    .toolbar-select {
+      height: 30px;
+      padding: 0 8px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      font-size: 0.75rem;
+      font-family: var(--font-body);
+      color: var(--text-2);
+      background: var(--white);
+      cursor: pointer;
+    }
+    .toolbar-select:focus { outline: none; border-color: var(--brand); }
+
+    .toolbar-color {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid var(--border);
+      transition: transform var(--t-spring);
+    }
+    .toolbar-color:hover { transform: scale(1.2); }
+    .toolbar-color.active { border-color: var(--brand); transform: scale(1.15); }
+
+    /* Resume paper */
+    .resume-paper {
+      width: 100%;
+      max-width: 680px;
+      background: var(--white);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+      min-height: 960px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    /* Template layouts inside paper */
+    .resume-header-section {
+      padding: 32px 36px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .resume-avatar-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .resume-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--brand-xlight);
+      border: 3px solid var(--white);
+      box-shadow: var(--shadow-md);
+      object-fit: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: var(--brand);
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .avatar-upload-hint {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: rgba(27,58,107,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity var(--t);
+      cursor: pointer;
+      text-align: center;
+    }
+    .resume-avatar-wrap:hover .avatar-upload-hint { opacity: 1; }
+
+    .resume-header-info { flex: 1; }
+    .resume-name-display {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--brand-dark);
+      line-height: 1.1;
+      margin-bottom: 4px;
+      border: 1px dashed transparent;
+      border-radius: 4px;
+      padding: 2px 4px;
+      transition: border-color var(--t);
+      cursor: text;
+      outline: none;
+    }
+    .resume-name-display:hover,
+    .resume-name-display:focus {
+      border-color: var(--brand);
+      background: var(--brand-xlight);
+    }
+
+    .resume-role-display {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gold-dark);
+      margin-bottom: 8px;
+      border: 1px dashed transparent;
+      border-radius: 4px;
+      padding: 2px 4px;
+      cursor: text;
+      outline: none;
+      transition: border-color var(--t);
+    }
+    .resume-role-display:hover,
+    .resume-role-display:focus { border-color: var(--gold); background: var(--gold-xlight); }
+
+    .resume-contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .resume-contact-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      color: var(--text-3);
+    }
+
+    .resume-body-section {
+      padding: 0 36px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .resume-section-block {
+      position: relative;
+    }
+    .resume-section-label {
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--brand);
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--brand);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .section-edit-hint {
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: var(--text-4);
+      text-transform: none;
+      letter-spacing: 0;
+      opacity: 0;
+      transition: opacity var(--t);
+    }
+    .resume-section-block:hover .section-edit-hint { opacity: 1; }
+
+    .resume-entry {
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--bg);
+    }
+    .resume-entry:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+    .entry-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3px;
+    }
+    .entry-title {
+      font-weight: 700;
+      font-size: 0.9375rem;
+      color: var(--brand-dark);
+    }
+    .entry-date {
+      font-size: 0.8rem;
+      color: var(--text-3);
+      white-space: nowrap;
+    }
+    .entry-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-3);
+      margin-bottom: 6px;
+    }
+    .entry-desc {
+      font-size: 0.8375rem;
+      color: var(--text-2);
+      line-height: 1.7;
+    }
+    .entry-desc ul {
+      list-style: disc;
+      padding-left: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .resume-skills-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .resume-skill-badge {
+      background: var(--brand-xlight);
+      color: var(--brand);
+      border: 1px solid rgba(27,58,107,0.15);
+      border-radius: var(--r-full);
+      padding: 4px 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    /* Editable overlay hint */
+    [contenteditable]:hover {
+      background: rgba(27,58,107,0.03);
+    }
+
+    /* ── Right Panel ── */
+    .editor-right-panel {
+      background: var(--white);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .right-panel-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .right-panel-title {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--brand-dark);
+    }
+
+    .right-panel-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* AI Feature Cards */
+    .ai-feature-card {
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      transition: border-color var(--t);
+    }
+    .ai-feature-card:hover { border-color: rgba(27,58,107,0.2); }
+
+    .ai-card-header {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      user-select: none;
+      transition: background var(--t);
+    }
+    .ai-card-header:hover { background: var(--bg); }
+
+    .ai-card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--r);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .ai-card-info { flex: 1; }
+    .ai-card-title {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--brand-dark);
+    }
+    .ai-card-sub {
+      font-size: 0.75rem;
+      color: var(--text-3);
+      margin-top: 1px;
+    }
+    .ai-card-arrow {
+      color: var(--text-4);
+      font-size: 0.875rem;
+      transition: transform var(--t);
+    }
+    .ai-feature-card.open .ai-card-arrow { transform: rotate(180deg); }
+
+    .ai-card-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1);
+      padding: 0 16px;
+    }
+    .ai-feature-card.open .ai-card-body {
+      max-height: 600px;
+      padding: 0 16px 16px;
+    }
+
+    /* AI Output box */
+    .ai-output {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 12px;
+      font-size: 0.8125rem;
+      color: var(--text-2);
+      line-height: 1.75;
+      min-height: 80px;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-top: 10px;
+      white-space: pre-wrap;
+    }
+    .ai-output.loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--text-3);
+    }
+
+    /* Score ring */
+    .score-ring-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0 8px;
+    }
+    .score-ring {
+      width: 96px;
+      height: 96px;
+      position: relative;
+    }
+    .score-ring svg { transform: rotate(-90deg); }
+    .score-ring-track { stroke: var(--bg-2); fill: none; stroke-width: 8; }
+    .score-ring-fill  { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s cubic-bezier(0.16,1,0.3,1); }
+    .score-ring-num {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-size: 1.375rem;
+      font-weight: 800;
+      color: var(--brand-dark);
+    }
+    .score-label {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text-3);
+      margin-top: 8px;
+    }
+
+    /* Score breakdown */
+    .score-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .score-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.8rem;
+    }
+    .score-item-label { flex: 1; color: var(--text-2); }
+    .score-item-bar-wrap {
+      width: 80px;
+      height: 5px;
+      background: var(--bg-2);
+      border-radius: var(--r-full);
+      overflow: hidden;
+    }
+    .score-item-bar {
+      height: 100%;
+      border-radius: var(--r-full);
+      background: linear-gradient(90deg, var(--brand), var(--gold));
+      transition: width 1s cubic-bezier(0.16,1,0.3,1);
+    }
+    .score-item-val {
+      font-weight: 700;
+      color: var(--brand-dark);
+      font-size: 0.75rem;
+      width: 28px;
+      text-align: right;
+    }
+
+    /* JD Match */
+    .jd-match-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 10px;
+    }
+    .jd-pill {
+      padding: 3px 10px;
+      border-radius: var(--r-full);
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    .jd-pill.found    { background: var(--success-light); color: var(--success); }
+    .jd-pill.missing  { background: var(--error-light); color: var(--error); }
+
+    /* Download bar at bottom */
+    .editor-bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 320px;
+      right: 340px;
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      z-index: 100;
+      box-shadow: 0 -4px 20px rgba(15,35,71,0.08);
+    }
+    @media (max-width: 1200px) { .editor-bottom-bar { right: 0; } }
+    @media (max-width: 900px)  { .editor-bottom-bar { left: 0; } }
+
+    .bottom-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .auto-save-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      animation: pulseGlow 2s infinite;
+    }
+    .auto-save-text { font-size: 0.8rem; color: var(--text-3); }
+
+    .bottom-bar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ── Mobile bottom tab bar ── */
+    .mobile-tab-bar {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      z-index: 200;
+      padding: 8px 0 4px;
+    }
+    @media (max-width: 900px) { .mobile-tab-bar { display: flex; } }
+
+    .mobile-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 6px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--text-3);
+      cursor: pointer;
+      border: none;
+      background: none;
+      transition: color var(--t);
+    }
+    .mobile-tab .ico { font-size: 1.1rem; }
+    .mobile-tab.active { color: var(--brand); }
+
+    /* Template selector popup */
+    .template-selector {
+      position: fixed;
+      bottom: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--white);
+      border-radius: var(--r-xl);
+      box-shadow: var(--shadow-xl);
+      border: 1px solid var(--border);
+      padding: 16px;
+      width: 340px;
+      z-index: 300;
+      display: none;
+    }
+    .template-selector.open { display: block; animation: fadeUp 0.3s ease both; }
+    .tpl-selector-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .tpl-swatch {
+      aspect-ratio: 3/4;
+      border-radius: var(--r);
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all var(--t);
+      overflow: hidden;
+    }
+    .tpl-swatch:hover  { border-color: var(--gold); transform: scale(1.05); }
+    .tpl-swatch.active { border-color: var(--brand); }
+
+    /* Floating WhatsApp button */
+    .whatsapp-fab {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #25D366;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+      cursor: pointer;
+      z-index: 400;
+      border: none;
+      font-size: 1.375rem;
+      transition: all var(--t-spring);
+      animation: float 3s ease-in-out infinite;
+    }
+    .whatsapp-fab:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 30px rgba(37,211,102,0.6);
+    }
+    @media (min-width: 901px) { .whatsapp-fab { bottom: 72px; right: 356px; } }
+
+    /* Cover letter panel */
+    .cover-letter-preview {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px;
+      font-size: 0.8rem;
+      line-height: 1.8;
+      color: var(--text-2);
+      max-height: 240px;
+      overflow-y: auto;
+      margin-top: 10px;
+      white-space: pre-wrap;
+    }
+
+    /* Scrollbar in panels */
+    .left-panel-body::-webkit-scrollbar,
+    .right-panel-body::-webkit-scrollbar,
+    .editor-canvas-wrap::-webkit-scrollbar { width: 4px; }
+    .left-panel-body::-webkit-scrollbar-thumb,
+    .right-panel-body::-webkit-scrollbar-thumb,
+    .editor-canvas-wrap::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 4px; }
+  </style>
+</head>
+
+<body>
+  <script src="components/nav.js"></script>
+
+  <!-- ════════════════════════════════════════
+       EDITOR SHELL
+  ════════════════════════════════════════ -->
+  <div class="editor-shell" id="editor-shell" style="margin-top:var(--nav-h)">
+
+    <!-- ══ LEFT PANEL — Form Input ══ -->
+    <div class="editor-left-panel">
+
+      <!-- Tab bar -->
+      <div class="left-panel-tabs">
+        <button class="left-tab active" data-tab="content" onclick="switchLeftTab('content',this)">
+          <span class="tab-icon">📝</span> Content
+        </button>
+        <button class="left-tab" data-tab="design" onclick="switchLeftTab('design',this)">
+          <span class="tab-icon">🎨</span> Design
+        </button>
+        <button class="left-tab" data-tab="sections" onclick="switchLeftTab('sections',this)">
+          <span class="tab-icon">⚙️</span> Sections
+        </button>
+      </div>
+
+      <div class="left-panel-body">
+
+        <!-- ── CONTENT TAB ── -->
+        <div class="tab-panel active" id="tab-content">
+
+          <!-- AI Hindi Generator -->
+          <div class="ai-hindi-box">
+            <div class="ai-hindi-box-title">
+              🤖 AI Se Banao (Hindi Mein Likho)
+            </div>
+            <textarea class="ai-hindi-textarea" id="ai-hindi-input"
+              placeholder="Jaise: Main 3 saal se software developer hoon, React aur Node.js mein kaam kiya hai, TCS mein tha..."></textarea>
+            <button class="btn btn-primary btn-sm btn-shine"
+                    style="width:100%;justify-content:center;margin-top:8px"
+                    onclick="generateFromHindi()">
+              <span id="ai-gen-text">✨ AI Se Resume Banao</span>
+            </button>
+          </div>
+
+          <!-- Personal Info -->
+          <div class="form-section">
+            <div class="form-section-title">
+              <span class="icon">👤</span> Personal Info
+            </div>
+            <div class="form-row">
+              <div>
+                <label class="editor-label">Pehla Naam</label>
+                <input type="text" class="editor-input" id="f-fname" placeholder="Rahul"
+                       oninput="updateResume()" />
+              </div>
+              <div>
+                <label class="editor-label">Aakhri Naam</label>
+                <input type="text" class="editor-input" id="f-lname" placeholder="Sharma"
+                       oninput="updateResume()" />
+              </div>
+            </div>
+            <div class="form-row full">
+              <label class="editor-label">Job Title / Role</label>
+              <input type="text" class="editor-input" id="f-role"
+                     placeholder="Software Developer"
+                     oninput="updateResume()" />
+            </div>
+            <div class="form-row full">
+              <label class="editor-label">Professional Summary</label>
+              <textarea class="editor-input" rows="3" id="f-summary"
+                        placeholder="2-3 lines mein apne baare mein likho..."
+                        oninput="updateResume()"></textarea>
+            </div>
+          </div>
+
+          <!-- Contact -->
+          <div class="form-section">
+            <div class="form-section-title">
+              <span class="icon">📞</span> Contact
+            </div>
+            <div class="form-row">
+              <div>
+                <label class="editor-label">Phone</label>
+                <input type="tel" class="editor-input" id="f-phone"
+                       placeholder="+91 98765 43210"
+                       oninput="updateResume()" />
+              </div>
+              <div>
+                <label class="editor-label">Email</label>
+                <input type="email" class="editor-input" id="f-email"
+                       placeholder="email@gmail.com"
+                       oninput="updateResume()" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div>
+                <label class="editor-label">Location</label>
+                <input type="text" class="editor-input" id="f-location"
+                       placeholder="Delhi, India"
+                       oninput="updateResume()" />
+              </div>
+              <div>
+                <label class="editor-label">LinkedIn</label>
+                <input type="text" class="editor-input" id="f-linkedin"
+                       placeholder="linkedin.com/in/rahul"
+                       oninput="updateResume()" />
+              </div>
+            </div>
+            <div class="form-row full">
+              <label class="editor-label">Portfolio / GitHub (optional)</label>
+              <input type="text" class="editor-input" id="f-portfolio"
+                     placeholder="github.com/rahul ya portfolio.com"
+                     oninput="updateResume()" />
+            </div>
+          </div>
+
+          <!-- Experience -->
+          <div class="form-section">
+            <div class="form-section-title">
+              <span class="icon">💼</span> Work Experience
+            </div>
+            <div id="exp-entries">
+              <div class="entry-card" data-entry="exp-0">
+                <div class="entry-card-header">
+                  <span class="entry-card-title">Experience #1</span>
+                  <button class="entry-delete" onclick="deleteEntry(this,'exp')">✕</button>
+                </div>
+                <div class="form-row">
+                  <div>
+                    <label class="editor-label">Job Title</label>
+                    <input type="text" class="editor-input" placeholder="Software Developer"
+                           data-field="exp-title-0" oninput="updateResume()" />
+                  </div>
+                  <div>
+                    <label class="editor-label">Company</label>
+                    <input type="text" class="editor-input" placeholder="TCS"
+                           data-field="exp-company-0" oninput="updateResume()" />
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div>
+                    <label class="editor-label">Shuru (Year)</label>
+                    <input type="text" class="editor-input" placeholder="2021"
+                           data-field="exp-start-0" oninput="updateResume()" />
+                  </div>
+                  <div>
+                    <label class="editor-label">Khatam</label>
+                    <input type="text" class="editor-input" placeholder="2024 ya Present"
+                           data-field="exp-end-0" oninput="updateResume()" />
+                  </div>
+                </div>
+                <div>
+                  <label class="editor-label">Kya Kiya (bullet points mein)</label>
+                  <textarea class="editor-input" rows="3"
+                            placeholder="• React frontend banaya&#10;• API integration ki&#10;• Team of 5 lead kiya"
+                            data-field="exp-desc-0" oninput="updateResume()"></textarea>
+                </div>
+              </div>
+            </div>
+            <button class="add-entry-btn" onclick="addEntry('exp')">
+              + Aur Experience Add Karo
+            </button>
+          </div>
+
+          <!-- Education -->
+          <div class="form-section">
+            <div class="form-section-title">
+              <span class="icon">🎓</span> Education
+            </div>
+            <div id="edu-entries">
+              <div class="entry-card" data-entry="edu-0">
+                <div class="entry-card-header">
+                  <span class="entry-card-title">Education #1</span>
+                  <button class="entry-delete" onclick="deleteEntry(this,'edu')">✕</button>
+                </div>
+                <div class="form-row">
+                  <div>
+                    <label class="editor-label">Degree</label>
+                    <input type="text" class="editor-input" placeholder="B.Tech / BCA / BA"
+                           data-field="edu-degree-0" oninput="updateResume()" />
+                  </div>
+                  <div>
+                    <label class="editor-label">College/University</label>
+                    <input type="text" class="editor-input" placeholder="Delhi University"
+                           data-field="edu-college-0" oninput="updateResume()" />
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div>
+                    <label class="editor-label">Year</label>
+                    <input type="text" class="editor-input" placeholder="2020 - 2024"
+                           data-field="edu-year-0" oninput="updateResume()" />
+                  </div>
+                  <div>
+                    <label class="editor-label">Score / %</label>
+                    <input type="text" class="editor-input" placeholder="8.5 CGPA / 78%"
+                           data-field="edu-score-0" oninput="updateResume()" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="add-entry-btn" onclick="addEntry('edu')">
+              + Aur Education Add Karo
+            </button>
+          </div>
+
+          <!-- Skills -->
+          <div class="form-section">
+            <div class="form-section-title">
+              <span class="icon">⚡</span> Skills
+            </div>
+            <div class="skills-tags" id="skills-container" onclick="focusSkillInput()">
+              <input type="text" class="skill-tag-input" id="skill-input"
+                     placeholder="Skill type karo, Enter dabaao"
+                     onkeydown="handleSkillInput(event)" />
+            </div>
+            <p style="font-size:0.7rem;color:var(--text-4);margin-top:6px">
+              💡 Enter ya comma dabaao skill add karne ke liye
+            </p>
+          </div>
+
+          <!-- Projects -->
+          <div class="form-section">
+            <div class="form-section-title">
+              <span class="icon">🚀</span> Projects
+            </div>
+            <div id="proj-entries">
+              <div class="entry-card" data-entry="proj-0">
+                <div class="entry-card-header">
+                  <span class="entry-card-title">Project #1</span>
+                  <button class="entry-delete" onclick="deleteEntry(this,'proj')">✕</button>
+                </div>
+                <div class="form-row full">
+                  <label class="editor-label">Project Naam</label>
+                  <input type="text" class="editor-input" placeholder="E-commerce Website"
+                         data-field="proj-name-0" oninput="updateResume()" />
+                </div>
+                <div class="form-row full">
+                  <label class="editor-label">Description</label>
+                  <textarea class="editor-input" rows="2"
+                            placeholder="React aur Node.js se banaya, 1000+ users hain..."
+                            data-field="proj-desc-0" oninput="updateResume()"></textarea>
+                </div>
+                <div class="form-row">
+                  <div>
+                    <label class="editor-label">Tech Stack</label>
+                    <input type="text" class="editor-input" placeholder="React, Node.js"
+                           data-field="proj-tech-0" oninput="updateResume()" />
+                  </div>
+                  <div>
+                    <label class="editor-label">Link (optional)</label>
+                    <input type="text" class="editor-input" placeholder="github.com/..."
+                           data-field="proj-link-0" oninput="updateResume()" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="add-entry-btn" onclick="addEntry('proj')">
+              + Aur Project Add Karo
+            </button>
+          </div>
+
+          <!-- Certifications -->
+          <div class="form-section">
+            <div class="form-section-title">
+              <span class="icon">🏆</span> Certifications (Optional)
+            </div>
+            <div id="cert-entries"></div>
+            <button class="add-entry-btn" onclick="addEntry('cert')">
+              + Certification Add Karo
+            </button>
+          </div>
+
+          <!-- Languages -->
+          <div class="form-section">
+            <div class="form-section-title">
+              <span class="icon">🌐</span> Languages
+            </div>
+            <div class="form-row">
+              <div>
+                <label class="editor-label">Language</label>
+                <input type="text" class="editor-input" placeholder="Hindi, English"
+                       id="f-languages" oninput="updateResume()" />
+              </div>
+              <div>
+                <label class="editor-label">Hobbies (optional)</label>
+                <input type="text" class="editor-input" placeholder="Cricket, Music"
+                       id="f-hobbies" oninput="updateResume()" />
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- end content tab -->
+
+        <!-- ── DESIGN TAB ── -->
+        <div class="tab-panel" id="tab-design">
+
+          <!-- Template select -->
+          <div class="form-section">
+            <div class="form-section-title"><span class="icon">🎨</span> Template</div>
+            <div class="tpl-selector-grid" id="inline-tpl-grid">
+              <!-- Swatches injected by JS -->
+            </div>
+            <a href="templates.html" class="btn btn-ghost btn-sm"
+               style="width:100%;justify-content:center;margin-top:10px">
+              Saare Templates Dekho (50+) →
+            </a>
+          </div>
+
+          <!-- Colors -->
+          <div class="form-section">
+            <div class="form-section-title"><span class="icon">🖌️</span> Colour Theme</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+              <button class="toolbar-color active" style="background:#1B3A6B" data-color="#1B3A6B" onclick="setColor('#1B3A6B',this)" title="Navy Blue"></button>
+              <button class="toolbar-color" style="background:#0f4c81" data-color="#0f4c81" onclick="setColor('#0f4c81',this)" title="Deep Blue"></button>
+              <button class="toolbar-color" style="background:#1a1a2e" data-color="#1a1a2e" onclick="setColor('#1a1a2e',this)" title="Midnight"></button>
+              <button class="toolbar-color" style="background:#064e3b" data-color="#064e3b" onclick="setColor('#064e3b',this)" title="Forest Green"></button>
+              <button class="toolbar-color" style="background:#7c2d12" data-color="#7c2d12" onclick="setColor('#7c2d12',this)" title="Burgundy"></button>
+              <button class="toolbar-color" style="background:#7c3aed" data-color="#7c3aed" onclick="setColor('#7c3aed',this)" title="Purple"></button>
+              <button class="toolbar-color" style="background:#0c4a6e" data-color="#0c4a6e" onclick="setColor('#0c4a6e',this)" title="Steel Blue"></button>
+              <button class="toolbar-color" style="background:#374151" data-color="#374151" onclick="setColor('#374151',this)" title="Charcoal"></button>
+              <button class="toolbar-color" style="background:#991b1b" data-color="#991b1b" onclick="setColor('#991b1b',this)" title="Crimson"></button>
+              <button class="toolbar-color" style="background:#b45309" data-color="#b45309" onclick="setColor('#b45309',this)" title="Amber"></button>
+            </div>
+
+            <!-- Custom color -->
+            <div style="display:flex;align-items:center;gap:8px">
+              <label class="editor-label" style="margin-bottom:0">Custom:</label>
+              <input type="color" id="custom-color" value="#1B3A6B"
+                     style="width:36px;height:28px;border:1.5px solid var(--border);border-radius:var(--r);cursor:pointer;padding:2px"
+                     onchange="setColor(this.value,null)" />
+              <span style="font-size:0.75rem;color:var(--text-3)" id="color-hex">#1B3A6B</span>
+            </div>
+          </div>
+
+          <!-- Font -->
+          <div class="form-section">
+            <div class="form-section-title"><span class="icon">Aa</span> Font</div>
+            <select class="editor-input" id="font-select" onchange="setFont(this.value)">
+              <option value="Sora">Sora (Default)</option>
+              <option value="DM Sans">DM Sans</option>
+              <option value="Inter">Inter</option>
+              <option value="Poppins">Poppins</option>
+              <option value="Playfair Display">Playfair Display</option>
+              <option value="Roboto">Roboto</option>
+              <option value="Lato">Lato</option>
+              <option value="Montserrat">Montserrat</option>
+            </select>
+          </div>
+
+          <!-- Font size -->
+          <div class="form-section">
+            <div class="form-section-title"><span class="icon">📏</span> Font Size</div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <input type="range" id="font-size-range" min="8" max="14" value="10"
+                     style="flex:1;accent-color:var(--brand)"
+                     oninput="setFontSize(this.value)" />
+              <span style="font-size:0.8rem;font-weight:600;color:var(--brand);width:30px"
+                    id="font-size-val">10</span>
+            </div>
+          </div>
+
+          <!-- Layout -->
+          <div class="form-section">
+            <div class="form-section-title"><span class="icon">📐</span> Layout</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <button class="btn btn-ghost btn-sm active" id="layout-single"
+                      onclick="setLayout('single',this)"
+                      style="justify-content:center">
+                Single Column
+              </button>
+              <button class="btn btn-ghost btn-sm" id="layout-double"
+                      onclick="setLayout('double',this)"
+                      style="justify-content:center">
+                Two Column
+              </button>
+            </div>
+          </div>
+
+          <!-- Spacing -->
+          <div class="form-section">
+            <div class="form-section-title"><span class="icon">↕️</span> Line Spacing</div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <input type="range" id="spacing-range" min="1" max="2" step="0.1" value="1.6"
+                     style="flex:1;accent-color:var(--brand)"
+                     oninput="setSpacing(this.value)" />
+              <span style="font-size:0.8rem;font-weight:600;color:var(--brand);width:30px"
+                    id="spacing-val">1.6</span>
+            </div>
+          </div>
+
+          <!-- Photo -->
+          <div class="form-section">
+            <div class="form-section-title"><span class="icon">📸</span> Photo</div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <div class="resume-avatar" style="width:56px;height:56px;font-size:1rem;cursor:pointer" onclick="triggerPhotoUpload()" id="photo-preview-mini">
+                RS
+              </div>
+              <div>
+                <button class="btn btn-ghost btn-sm" onclick="triggerPhotoUpload()">
+                  📤 Photo Upload Karo
+                </button>
+                <p style="font-size:0.7rem;color:var(--text-4);margin-top:4px">JPG ya PNG, max 2MB</p>
+              </div>
+            </div>
+            <input type="file" id="photo-input" accept="image/*" style="display:none"
+                   onchange="handlePhotoUpload(event)" />
+          </div>
+
+        </div>
+        <!-- end design tab -->
+
+        <!-- ── SECTIONS TAB ── -->
+        <div class="tab-panel" id="tab-sections">
+          <div class="form-section">
+            <div class="form-section-title"><span class="icon">⚙️</span> Sections Show/Hide</div>
+            <p style="font-size:0.75rem;color:var(--text-3);margin-bottom:12px">
+              Jo sections chahiye — on karo, baaki off karo
+            </p>
+            <div style="display:flex;flex-direction:column;gap:8px" id="sections-toggle-list">
+              <!-- Injected by JS -->
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title"><span class="icon">🔀</span> Section Order</div>
+            <p style="font-size:0.75rem;color:var(--text-3);margin-bottom:12px">
+              Drag karo section order change karne ke liye
+            </p>
+            <div id="sections-order-list" style="display:flex;flex-direction:column;gap:6px">
+              <!-- Injected by JS -->
+            </div>
+          </div>
+        </div>
+        <!-- end sections tab -->
+
+      </div>
+      <!-- end left panel body -->
+    </div>
+    <!-- end left panel -->
+
+    <!-- ══ MIDDLE — Canvas ══ -->
+    <div class="editor-canvas-wrap" id="canvas-wrap">
+
+      <!-- Toolbar -->
+      <div class="canvas-toolbar">
+        <div class="toolbar-group">
+          <button class="toolbar-btn" onclick="execCmd('bold')" title="Bold"><b>B</b></button>
+          <button class="toolbar-btn" onclick="execCmd('italic')" title="Italic"><i>I</i></button>
+          <button class="toolbar-btn" onclick="execCmd('underline')" title="Underline"><u>U</u></button>
+        </div>
+        <div class="toolbar-divider"></div>
+        <div class="toolbar-group">
+          <button class="toolbar-btn" onclick="execCmd('justifyLeft')" title="Left">⬅</button>
+          <button class="toolbar-btn" onclick="execCmd('justifyCenter')" title="Center">☰</button>
+          <button class="toolbar-btn" onclick="execCmd('justifyRight')" title="Right">➡</button>
+        </div>
+        <div class="toolbar-divider"></div>
+        <div class="toolbar-group">
+          <select class="toolbar-select" onchange="setFont(this.value)" id="toolbar-font">
+            <option value="Sora">Sora</option>
+            <option value="DM Sans">DM Sans</option>
+            <option value="Poppins">Poppins</option>
+            <option value="Roboto">Roboto</option>
+          </select>
+        </div>
+        <div class="toolbar-divider"></div>
+        <div class="toolbar-group" style="gap:5px">
+          <button class="toolbar-color active" style="background:#1B3A6B;width:20px;height:20px" data-color="#1B3A6B" onclick="setColor('#1B3A6B',this)"></button>
+          <button class="toolbar-color" style="background:#064e3b;width:20px;height:20px" onclick="setColor('#064e3b',this)"></button>
+          <button class="toolbar-color" style="background:#7c3aed;width:20px;height:20px" onclick="setColor('#7c3aed',this)"></button>
+          <button class="toolbar-color" style="background:#1a1a2e;width:20px;height:20px" onclick="setColor('#1a1a2e',this)"></button>
+        </div>
+        <div class="toolbar-divider"></div>
+        <button class="toolbar-btn" onclick="undoResume()" title="Undo">↩</button>
+        <button class="toolbar-btn" onclick="redoResume()" title="Redo">↪</button>
+        <div class="toolbar-divider"></div>
+        <button class="toolbar-btn" onclick="zoomOut()" title="Zoom Out">−</button>
+        <span style="font-size:0.75rem;color:var(--text-3);min-width:36px;text-align:center" id="zoom-label">100%</span>
+        <button class="toolbar-btn" onclick="zoomIn()" title="Zoom In">+</button>
+      </div>
+
+      <!-- Resume Paper -->
+      <div class="resume-paper" id="resume-paper">
+
+        <!-- Header -->
+        <div class="resume-header-section" id="resume-header"
+             style="background:linear-gradient(135deg,#1B3A6B,#2a5298)">
+
+          <!-- Avatar -->
+          <div class="resume-avatar-wrap" onclick="triggerPhotoUpload()">
+            <div class="resume-avatar" id="resume-avatar-display">RS</div>
+            <div class="avatar-upload-hint">📷<br/>Photo<br/>Lagao</div>
+          </div>
+
+          <!-- Info -->
+          <div class="resume-header-info">
+            <div class="resume-name-display" contenteditable="true" id="disp-name"
+                 style="color:white" oninput="syncFromDisplay('name',this)">
+              Rahul Sharma
+            </div>
+            <div class="resume-role-display" contenteditable="true" id="disp-role"
+                 style="color:rgba(245,166,35,0.9)" oninput="syncFromDisplay('role',this)">
+              Software Developer
+            </div>
+            <div class="resume-contact-row" id="disp-contact">
+              <span class="resume-contact-item" style="color:rgba(255,255,255,0.8)">📞 +91 98765 43210</span>
+              <span class="resume-contact-item" style="color:rgba(255,255,255,0.8)">✉️ rahul@email.com</span>
+              <span class="resume-contact-item" style="color:rgba(255,255,255,0.8)">📍 Delhi</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div class="resume-body-section" id="resume-body">
+
+          <!-- Summary -->
+          <div class="resume-section-block" id="sec-summary">
+            <div class="resume-section-label">
+              Professional Summary
+              <span class="section-edit-hint">Click karke edit karo</span>
+            </div>
+            <p contenteditable="true" class="entry-desc" id="disp-summary"
+               style="line-height:1.75"
+               oninput="syncFromDisplay('summary',this)">
+              Experienced Software Developer with 3+ years of expertise in React.js and Node.js.
+              Proven track record of delivering scalable web applications. Strong problem-solving
+              skills with a passion for clean, efficient code.
+            </p>
+          </div>
+
+          <!-- Experience -->
+          <div class="resume-section-block" id="sec-experience">
+            <div class="resume-section-label">
+              Work Experience
+              <span class="section-edit-hint">Click karke edit karo</span>
+            </div>
+            <div id="disp-experience">
+              <div class="resume-entry">
+                <div class="entry-title-row">
+                  <span class="entry-title">Software Developer</span>
+                  <span class="entry-date">2021 – Present</span>
+                </div>
+                <div class="entry-subtitle">TCS · Delhi</div>
+                <div class="entry-desc">
+                  <ul>
+                    <li>React.js frontend banaya jo 50,000+ users use karte hain</li>
+                    <li>Node.js REST APIs develop ki, response time 40% improve hua</li>
+                    <li>5 member team lead kiya, sprint deliveries on time ki</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Education -->
+          <div class="resume-section-block" id="sec-education">
+            <div class="resume-section-label">
+              Education
+              <span class="section-edit-hint">Click karke edit karo</span>
+            </div>
+            <div id="disp-education">
+              <div class="resume-entry">
+                <div class="entry-title-row">
+                  <span class="entry-title">B.Tech Computer Science</span>
+                  <span class="entry-date">2017 – 2021</span>
+                </div>
+                <div class="entry-subtitle">Delhi Technological University · 8.2 CGPA</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skills -->
+          <div class="resume-section-block" id="sec-skills">
+            <div class="resume-section-label">Skills</div>
+            <div class="resume-skills-wrap" id="disp-skills">
+              <span class="resume-skill-badge">React.js</span>
+              <span class="resume-skill-badge">Node.js</span>
+              <span class="resume-skill-badge">JavaScript</span>
+              <span class="resume-skill-badge">Python</span>
+              <span class="resume-skill-badge">MongoDB</span>
+              <span class="resume-skill-badge">Git</span>
+              <span class="resume-skill-badge">REST APIs</span>
+            </div>
+          </div>
+
+          <!-- Projects -->
+          <div class="resume-section-block" id="sec-projects">
+            <div class="resume-section-label">Projects</div>
+            <div id="disp-projects">
+              <div class="resume-entry">
+                <div class="entry-title-row">
+                  <span class="entry-title">E-Commerce Platform</span>
+                  <span class="entry-date" style="color:var(--brand);font-size:0.75rem">React · Node.js</span>
+                </div>
+                <div class="entry-desc">
+                  Full-stack e-commerce site banaya jisme 1000+ products hain.
+                  Payment gateway integrate kiya, mobile responsive hai.
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- end resume body -->
+      </div>
+      <!-- end resume paper -->
+
+      <!-- Bottom padding for fixed bar -->
+      <div style="height:70px;flex-shrink:0"></div>
+    </div>
+    <!-- end canvas -->
+
+    <!-- ══ RIGHT PANEL — AI Tools ══ -->
+    <div class="editor-right-panel">
+      <div class="right-panel-header">
+        <span class="right-panel-title">🤖 AI Tools</span>
+        <span class="badge badge-gold">Smart</span>
+      </div>
+
+      <div class="right-panel-body">
+
+        <!-- Resume Score -->
+        <div class="ai-feature-card open" id="card-score">
+          <div class="ai-card-header" onclick="toggleAICard('score')">
+            <div class="ai-card-icon" style="background:var(--brand-xlight)">📊</div>
+            <div class="ai-card-info">
+              <div class="ai-card-title">Resume Score</div>
+              <div class="ai-card-sub">AI feedback & improvement tips</div>
+            </div>
+            <span class="ai-card-arrow">▼</span>
+          </div>
+          <div class="ai-card-body">
+            <div class="score-ring-wrap">
+              <div class="score-ring">
+                <svg viewBox="0 0 96 96" width="96" height="96">
+                  <circle class="score-ring-track" cx="48" cy="48" r="40"/>
+                  <circle class="score-ring-fill" id="score-ring-fill"
+                          cx="48" cy="48" r="40"
+                          stroke="url(#score-gradient)"
+                          stroke-dasharray="251.2"
+                          stroke-dashoffset="62.8"/>
+                  <defs>
+                    <linearGradient id="score-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" style="stop-color:#1B3A6B"/>
+                      <stop offset="100%" style="stop-color:#F5A623"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div class="score-ring-num" id="score-num">75</div>
+              </div>
+              <span class="score-label">Resume Score</span>
+            </div>
+
+            <div class="score-breakdown">
+              <div class="score-item">
+                <span class="score-item-label">Content Quality</span>
+                <div class="score-item-bar-wrap">
+                  <div class="score-item-bar" style="width:80%"></div>
+                </div>
+                <span class="score-item-val">80</span>
+              </div>
+              <div class="score-item">
+                <span class="score-item-label">ATS Friendly</span>
+                <div class="score-item-bar-wrap">
+                  <div class="score-item-bar" style="width:72%"></div>
+                </div>
+                <span class="score-item-val">72</span>
+              </div>
+              <div class="score-item">
+                <span class="score-item-label">Skills Match</span>
+                <div class="score-item-bar-wrap">
+                  <div class="score-item-bar" style="width:68%"></div>
+                </div>
+                <span class="score-item-val">68</span>
+              </div>
+              <div class="score-item">
+                <span class="score-item-label">Completeness</span>
+                <div class="score-item-bar-wrap">
+                  <div class="score-item-bar" style="width:90%"></div>
+                </div>
+                <span class="score-item-val">90</span>
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-sm btn-shine"
+                    style="width:100%;justify-content:center;margin-top:14px"
+                    onclick="analyzeScore()">
+              🔍 AI Se Score Analyze Karo
+            </button>
+
+            <div class="ai-output" id="score-output" style="display:none"></div>
+          </div>
+        </div>
+
+        <!-- JD Match -->
+        <div class="ai-feature-card" id="card-jd">
+          <div class="ai-card-header" onclick="toggleAICard('jd')">
+            <div class="ai-card-icon" style="background:#dcfce7">🎯</div>
+            <div class="ai-card-info">
+              <div class="ai-card-title">JD Match</div>
+              <div class="ai-card-sub">Job Description paste karo, resume optimize ho</div>
+            </div>
+            <span class="ai-card-arrow">▼</span>
+          </div>
+          <div class="ai-card-body">
+            <label class="editor-label">Job Description Yahan Paste Karo</label>
+            <textarea class="editor-input" id="jd-input" rows="5"
+                      placeholder="Company ki job posting se poori description copy karo aur yahan paste karo...&#10;&#10;Jaise: 'We are looking for a React Developer with 2+ years experience...'"></textarea>
+
+            <button class="btn btn-sm btn-shine"
+                    style="width:100%;justify-content:center;margin-top:8px;background:var(--success);color:white"
+                    onclick="analyzeJD()">
+              🎯 Resume Ko JD Ke Liye Optimize Karo
+            </button>
+
+            <div id="jd-output" style="display:none;margin-top:12px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                <span style="font-size:0.8rem;font-weight:700;color:var(--success)">✓ Keywords Found</span>
+                <span style="font-size:0.8rem;font-weight:700;color:var(--error)">✕ Missing</span>
+              </div>
+              <div class="jd-match-pills" id="jd-pills"></div>
+              <div class="ai-output" id="jd-suggestions" style="margin-top:10px"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cover Letter -->
+        <div class="ai-feature-card" id="card-cover">
+          <div class="ai-card-header" onclick="toggleAICard('cover')">
+            <div class="ai-card-icon" style="background:var(--gold-xlight)">✉️</div>
+            <div class="ai-card-info">
+              <div class="ai-card-title">Cover Letter</div>
+              <div class="ai-card-sub">AI se professional cover letter banao</div>
+            </div>
+            <span class="ai-card-arrow">▼</span>
+          </div>
+          <div class="ai-card-body">
+            <div class="form-row full" style="margin-bottom:8px">
+              <label class="editor-label">Company Ka Naam</label>
+              <input type="text" class="editor-input" id="cl-company"
+                     placeholder="TCS, Infosys, Startup..." />
+            </div>
+            <div class="form-row full" style="margin-bottom:8px">
+              <label class="editor-label">Job Role</label>
+              <input type="text" class="editor-input" id="cl-role"
+                     placeholder="Software Developer, Manager..." />
+            </div>
+            <div class="form-row full" style="margin-bottom:8px">
+              <label class="editor-label">Tone</label>
+              <select class="editor-input" id="cl-tone">
+                <option value="professional">Professional (Formal)</option>
+                <option value="friendly">Friendly (Conversational)</option>
+                <option value="enthusiastic">Enthusiastic (Energetic)</option>
+              </select>
+            </div>
+
+            <button class="btn btn-gold btn-sm btn-shine"
+                    style="width:100%;justify-content:center"
+                    onclick="generateCoverLetter()">
+              ✉️ Cover Letter Banao
+            </button>
+
+            <div id="cover-output-wrap" style="display:none">
+              <div class="cover-letter-preview" id="cover-letter-text"></div>
+              <div style="display:flex;gap:6px;margin-top:8px">
+                <button class="btn btn-ghost btn-sm" style="flex:1;justify-content:center"
+                        onclick="copyCoverLetter()">
+                  📋 Copy
+                </button>
+                <button class="btn btn-primary btn-sm" style="flex:1;justify-content:center"
+                        onclick="downloadCoverLetter()">
+                  📥 Download
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WhatsApp Share -->
+        <div class="ai-feature-card" id="card-whatsapp">
+          <div class="ai-card-header" onclick="toggleAICard('whatsapp')">
+            <div class="ai-card-icon" style="background:#dcfce7">📱</div>
+            <div class="ai-card-info">
+              <div class="ai-card-title">WhatsApp Share</div>
+              <div class="ai-card-sub">Resume link generate karo, share karo</div>
+            </div>
+            <span class="ai-card-arrow">▼</span>
+          </div>
+          <div class="ai-card-body">
+            <p style="font-size:0.8rem;color:var(--text-3);margin-bottom:12px;line-height:1.7">
+              Resume ka shareable link banao — WhatsApp, email, LinkedIn pe seedha bhejo.
+              Link 30 din tak valid rahega.
+            </p>
+
+            <button class="btn btn-sm btn-shine"
+                    style="width:100%;justify-content:center;background:#25D366;color:white;margin-bottom:8px"
+                    onclick="generateShareLink()">
+              🔗 Share Link Generate Karo
+            </button>
+
+            <div id="share-link-wrap" style="display:none">
+              <div style="display:flex;gap:6px;align-items:center;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r);padding:8px 10px;margin-bottom:8px">
+                <span style="font-size:0.75rem;color:var(--brand);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="share-link-text">
+                  banaocv.in/r/abc123
+                </span>
+                <button class="btn btn-primary btn-sm" style="flex-shrink:0" onclick="copyShareLink()">
+                  Copy
+                </button>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                <button class="btn btn-sm" onclick="shareWhatsApp()"
+                        style="background:#25D366;color:white;justify-content:center;gap:6px">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
+                  WhatsApp
+                </button>
+                <button class="btn btn-ghost btn-sm" onclick="shareEmail()" style="justify-content:center">
+                  ✉️ Email
+                </button>
+                <button class="btn btn-ghost btn-sm" onclick="shareLinkedIn()" style="justify-content:center">
+                  💼 LinkedIn
+                </button>
+                <button class="btn btn-ghost btn-sm" onclick="downloadQR()" style="justify-content:center">
+                  📲 QR Code
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Improve Tips -->
+        <div class="ai-feature-card" id="card-tips">
+          <div class="ai-card-header" onclick="toggleAICard('tips')">
+            <div class="ai-card-icon" style="background:#ede9fe">💡</div>
+            <div class="ai-card-info">
+              <div class="ai-card-title">AI Improvement Tips</div>
+              <div class="ai-card-sub">Resume better karne ke suggestions</div>
+            </div>
+            <span class="ai-card-arrow">▼</span>
+          </div>
+          <div class="ai-card-body">
+            <button class="btn btn-sm btn-shine"
+                    style="width:100%;justify-content:center;background:#7c3aed;color:white"
+                    onclick="getImprovementTips()">
+              💡 Tips Do
+            </button>
+            <div class="ai-output" id="tips-output" style="display:none;margin-top:10px"></div>
+          </div>
+        </div>
+
+      </div>
+      <!-- end right panel body -->
+    </div>
+    <!-- end right panel -->
+
+  </div>
+  <!-- end editor shell -->
+
+  <!-- ══ BOTTOM BAR ══ -->
+  <div class="editor-bottom-bar">
+    <div class="bottom-bar-left">
+      <div class="auto-save-dot" id="save-dot"></div>
+      <span class="auto-save-text" id="save-text">Auto-saved</span>
+    </div>
+    <div class="bottom-bar-actions">
+      <button class="btn btn-ghost btn-sm" onclick="previewResume()">
+        👁️ Preview
+      </button>
+      <button class="btn btn-ghost btn-sm" onclick="generateShareLink()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share
+      </button>
+      <button class="btn btn-primary btn-sm btn-shine" onclick="downloadPDF()">
+        📥 PDF Download
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ WhatsApp FAB ══ -->
+  <button class="whatsapp-fab" onclick="shareWhatsApp()" title="WhatsApp par share karo">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </button>
+
+  <!-- ══ Mobile bottom tabs ══ -->
+  <div class="mobile-tab-bar">
+    <button class="mobile-tab active" onclick="mobileTab('edit',this)">
+      <span class="ico">✏️</span> Edit
+    </button>
+    <button class="mobile-tab" onclick="mobileTab('design',this)">
+      <span class="ico">🎨</span> Design
+    </button>
+    <button class="mobile-tab" onclick="mobileTab('preview',this)">
+      <span class="ico">👁️</span> Preview
+    </button>
+    <button class="mobile-tab" onclick="mobileTab('ai',this)">
+      <span class="ico">🤖</span> AI
+    </button>
+    <button class="mobile-tab" onclick="downloadPDF()">
+      <span class="ico">📥</span> Download
+    </button>
+  </div>
+
+  <!-- Auth Modal -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal">
+      <button class="modal-close" data-modal-close>✕</button>
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="font-size:2rem;margin-bottom:8px">🔒</div>
+        <h2 style="font-size:1.5rem;margin-bottom:6px">Premium Feature</h2>
+        <p style="color:var(--text-3);font-size:0.9rem">Yeh feature premium mein available hai — sirf ₹99 ek baar</p>
+      </div>
+      <a href="pricing.html" class="btn btn-gold btn-lg btn-shine" style="width:100%;justify-content:center">
+        ₹99 Mein Unlock Karo 🚀
+      </a>
+      <div class="modal-divider">
+        <span class="modal-divider-line"></span>
+        <span class="modal-divider-text">ya free mein continue karo</span>
+        <span class="modal-divider-line"></span>
+      </div>
+      <button class="btn btn-ghost btn-lg" style="width:100%;justify-content:center" data-modal-close>
+        Abhi Nahi
+      </button>
+    </div>
+  </div>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/ai.js"></script>
+
+  <script>
+  /* ══════════════════════════════════════════════
+     EDITOR CORE LOGIC
+  ══════════════════════════════════════════════ */
+  'use strict';
+
+  /* ── State ── */
+  const state = {
+    color:    '#1B3A6B',
+    font:     'Sora',
+    fontSize: 10,
+    spacing:  1.6,
+    zoom:     1,
+    layout:   'single',
+    skills:   ['React.js','Node.js','JavaScript','Python','MongoDB','Git','REST APIs'],
+    expCount: 1,
+    eduCount: 1,
+    projCount:1,
+    certCount:0,
+    history:  [],
+    hIndex:   -1,
+    shareLink: null,
+  };
+
+  /* ── Left Tab Switch ── */
+  function switchLeftTab(name, btn) {
+    document.querySelectorAll('.left-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+  }
+
+  /* ── Update Resume from form inputs ── */
+  function updateResume() {
+    const fname = document.getElementById('f-fname')?.value || '';
+    const lname = document.getElementById('f-lname')?.value || '';
+    const role  = document.getElementById('f-role')?.value  || '';
+    const phone = document.getElementById('f-phone')?.value || '';
+    const email = document.getElementById('f-email')?.value || '';
+    const loc   = document.getElementById('f-location')?.value || '';
+    const sum   = document.getElementById('f-summary')?.value || '';
+
+    if (fname || lname) {
+      const initials = ((fname[0]||'') + (lname[0]||'')).toUpperCase();
+      document.getElementById('disp-name').textContent  = (fname + ' ' + lname).trim();
+      document.getElementById('resume-avatar-display').textContent = initials;
+      document.getElementById('photo-preview-mini').textContent    = initials;
+    }
+    if (role) document.getElementById('disp-role').textContent = role;
+
+    const contactEl = document.getElementById('disp-contact');
+    if (contactEl) {
+      const items = [];
+      if (phone) items.push(`📞 ${phone}`);
+      if (email) items.push(`✉️ ${email}`);
+      if (loc)   items.push(`📍 ${loc}`);
+      const li = document.getElementById('f-linkedin')?.value;
+      if (li)    items.push(`🔗 ${li}`);
+      contactEl.innerHTML = items.map(i =>
+        `<span class="resume-contact-item" style="color:rgba(255,255,255,0.85)">${i}</span>`
+      ).join('');
+    }
+
+    if (sum) document.getElementById('disp-summary').textContent = sum;
+
+    renderExperience();
+    renderEducation();
+    renderProjects();
+    renderSkills();
+    autoSave();
+  }
+
+  /* ── Render Experience ── */
+  function renderExperience() {
+    const container = document.getElementById('disp-experience');
+    if (!container) return;
+    let html = '';
+    for (let i = 0; i < state.expCount; i++) {
+      const title   = document.querySelector(`[data-field="exp-title-${i}"]`)?.value   || '';
+      const company = document.querySelector(`[data-field="exp-company-${i}"]`)?.value || '';
+      const start   = document.querySelector(`[data-field="exp-start-${i}"]`)?.value   || '';
+      const end     = document.querySelector(`[data-field="exp-end-${i}"]`)?.value     || '';
+      const desc    = document.querySelector(`[data-field="exp-desc-${i}"]`)?.value    || '';
+      if (!title && !company) continue;
+      const bullets = desc.split('\n').filter(l => l.trim()).map(l =>
+        `<li>${l.replace(/^[•\-]\s*/,'')}</li>`).join('');
+      html += `
+        <div class="resume-entry">
+          <div class="entry-title-row">
+            <span class="entry-title">${title}</span>
+            <span class="entry-date">${start}${end ? ' – '+end : ''}</span>
+          </div>
+          <div class="entry-subtitle">${company}</div>
+          ${bullets ? `<div class="entry-desc"><ul>${bullets}</ul></div>` : ''}
+        </div>`;
+    }
+    container.innerHTML = html || container.innerHTML;
+  }
+
+  /* ── Render Education ── */
+  function renderEducation() {
+    const container = document.getElementById('disp-education');
+    if (!container) return;
+    let html = '';
+    for (let i = 0; i < state.eduCount; i++) {
+      const degree  = document.querySelector(`[data-field="edu-degree-${i}"]`)?.value  || '';
+      const college = document.querySelector(`[data-field="edu-college-${i}"]`)?.value || '';
+      const year    = document.querySelector(`[data-field="edu-year-${i}"]`)?.value    || '';
+      const score   = document.querySelector(`[data-field="edu-score-${i}"]`)?.value   || '';
+      if (!degree && !college) continue;
+      html += `
+        <div class="resume-entry">
+          <div class="entry-title-row">
+            <span class="entry-title">${degree}</span>
+            <span class="entry-date">${year}</span>
+          </div>
+          <div class="entry-subtitle">${college}${score ? ' · ' + score : ''}</div>
+        </div>`;
+    }
+    container.innerHTML = html || container.innerHTML;
+  }
+
+  /* ── Render Projects ── */
+  function renderProjects() {
+    const container = document.getElementById('disp-projects');
+    if (!container) return;
+    let html = '';
+    for (let i = 0; i < state.projCount; i++) {
+      const name = document.querySelector(`[data-field="proj-name-${i}"]`)?.value || '';
+      const desc = document.querySelector(`[data-field="proj-desc-${i}"]`)?.value || '';
+      const tech = document.querySelector(`[data-field="proj-tech-${i}"]`)?.value || '';
+      if (!name) continue;
+      html += `
+        <div class="resume-entry">
+          <div class="entry-title-row">
+            <span class="entry-title">${name}</span>
+            ${tech ? `<span class="entry-date" style="color:var(--brand);font-size:0.75rem">${tech}</span>` : ''}
+          </div>
+          ${desc ? `<div class="entry-desc">${desc}</div>` : ''}
+        </div>`;
+    }
+    container.innerHTML = html || container.innerHTML;
+  }
+
+  /* ── Render Skills ── */
+  function renderSkills() {
+    const container = document.getElementById('disp-skills');
+    if (!container) return;
+    container.innerHTML = state.skills.map(s =>
+      `<span class="resume-skill-badge" style="background:${state.color}18;color:${state.color};border-color:${state.color}30">${s}</span>`
+    ).join('');
+  }
+
+  /* ── Skills Input ── */
+  function handleSkillInput(e) {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      const val = e.target.value.trim().replace(/,$/, '');
+      if (val && !state.skills.includes(val)) {
+        state.skills.push(val);
+        renderSkillTags();
+        renderSkills();
+      }
+      e.target.value = '';
+    } else if (e.key === 'Backspace' && !e.target.value) {
+      state.skills.pop();
+      renderSkillTags();
+      renderSkills();
+    }
+  }
+
+  function renderSkillTags() {
+    const container = document.getElementById('skills-container');
+    const input     = document.getElementById('skill-input');
+    container.innerHTML = '';
+    state.skills.forEach((s, i) => {
+      const tag = document.createElement('span');
+      tag.className = 'skill-tag';
+      tag.innerHTML = `${s}<button class="skill-tag-remove" onclick="removeSkill(${i})">✕</button>`;
+      container.appendChild(tag);
+    });
+    container.appendChild(input);
+  }
+
+  function removeSkill(i) {
+    state.skills.splice(i, 1);
+    renderSkillTags();
+    renderSkills();
+  }
+
+  function focusSkillInput() {
+    document.getElementById('skill-input')?.focus();
+  }
+
+  /* ── Add / Delete Entries ── */
+  function addEntry(type) {
+    let container, countKey, label;
+    if (type === 'exp')  { container = 'exp-entries';  countKey = 'expCount';  label = 'Experience'; }
+    if (type === 'edu')  { container = 'edu-entries';  countKey = 'eduCount';  label = 'Education'; }
+    if (type === 'proj') { container = 'proj-entries'; countKey = 'projCount'; label = 'Project'; }
+    if (type === 'cert') { container = 'cert-entries'; countKey = 'certCount'; label = 'Certification'; }
+
+    const i    = state[countKey];
+    const wrap = document.getElementById(container);
+    const div  = document.createElement('div');
+    div.className = 'entry-card';
+    div.dataset.entry = `${type}-${i}`;
+
+    if (type === 'exp') {
+      div.innerHTML = `
+        <div class="entry-card-header">
+          <span class="entry-card-title">${label} #${i+1}</span>
+          <button class="entry-delete" onclick="deleteEntry(this,'${type}')">✕</button>
+        </div>
+        <div class="form-row">
+          <div><label class="editor-label">Job Title</label>
+          <input type="text" class="editor-input" placeholder="Developer" data-field="exp-title-${i}" oninput="updateResume()"/></div>
+          <div><label class="editor-label">Company</label>
+          <input type="text" class="editor-input" placeholder="Company" data-field="exp-company-${i}" oninput="updateResume()"/></div>
+        </div>
+        <div class="form-row">
+          <div><label class="editor-label">Shuru</label>
+          <input type="text" class="editor-input" placeholder="2022" data-field="exp-start-${i}" oninput="updateResume()"/></div>
+          <div><label class="editor-label">Khatam</label>
+          <input type="text" class="editor-input" placeholder="Present" data-field="exp-end-${i}" oninput="updateResume()"/></div>
+        </div>
+        <div><label class="editor-label">Kya Kiya</label>
+        <textarea class="editor-input" rows="3" placeholder="• Achievements..." data-field="exp-desc-${i}" oninput="updateResume()"></textarea></div>`;
+    } else if (type === 'edu') {
+      div.innerHTML = `
+        <div class="entry-card-header">
+          <span class="entry-card-title">${label} #${i+1}</span>
+          <button class="entry-delete" onclick="deleteEntry(this,'${type}')">✕</button>
+        </div>
+        <div class="form-row">
+          <div><label class="editor-label">Degree</label>
+          <input type="text" class="editor-input" placeholder="B.Tech" data-field="edu-degree-${i}" oninput="updateResume()"/></div>
+          <div><label class="editor-label">College</label>
+          <input type="text" class="editor-input" placeholder="University" data-field="edu-college-${i}" oninput="updateResume()"/></div>
+        </div>
+        <div class="form-row">
+          <div><label class="editor-label">Year</label>
+          <input type="text" class="editor-input" placeholder="2020-2024" data-field="edu-year-${i}" oninput="updateResume()"/></div>
+          <div><label class="editor-label">Score</label>
+          <input type="text" class="editor-input" placeholder="8.0 CGPA" data-field="edu-score-${i}" oninput="updateResume()"/></div>
+        </div>`;
+    } else if (type === 'proj') {
+      div.innerHTML = `
+        <div class="entry-card-header">
+          <span class="entry-card-title">${label} #${i+1}</span>
+          <button class="entry-delete" onclick="deleteEntry(this,'${type}')">✕</button>
+        </div>
+        <div class="form-row full"><label class="editor-label">Project Naam</label>
+        <input type="text" class="editor-input" data-field="proj-name-${i}" oninput="updateResume()"/></div>
+        <div class="form-row full"><label class="editor-label">Description</label>
+        <textarea class="editor-input" rows="2" data-field="proj-desc-${i}" oninput="updateResume()"></textarea></div>
+        <div class="form-row">
+          <div><label class="editor-label">Tech Stack</label>
+          <input type="text" class="editor-input" data-field="proj-tech-${i}" oninput="updateResume()"/></div>
+          <div><label class="editor-label">Link</label>
+          <input type="text" class="editor-input" data-field="proj-link-${i}" oninput="updateResume()"/></div>
+        </div>`;
+    } else if (type === 'cert') {
+      div.innerHTML = `
+        <div class="entry-card-header">
+          <span class="entry-card-title">${label} #${i+1}</span>
+          <button class="entry-delete" onclick="deleteEntry(this,'${type}')">✕</button>
+        </div>
+        <div class="form-row">
+          <div><label class="editor-label">Certification</label>
+          <input type="text" class="editor-input" placeholder="AWS Certified" data-field="cert-name-${i}" oninput="updateResume()"/></div>
+          <div><label class="editor-label">Year</label>
+          <input type="text" class="editor-input" placeholder="2023" data-field="cert-year-${i}" oninput="updateResume()"/></div>
+        </div>`;
+    }
+
+    wrap.appendChild(div);
+    div.style.animation = 'fadeUp 0.3s ease both';
+    state[countKey]++;
+  }
+
+  function deleteEntry(btn, type) {
+    const card = btn.closest('.entry-card');
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(-8px)';
+    card.style.transition = '0.2s ease';
+    setTimeout(() => { card.remove(); updateResume(); }, 200);
+  }
+
+  /* ── Design Controls ── */
+  function setColor(hex, btn) {
+    state.color = hex;
+    document.getElementById('custom-color').value = hex;
+    document.getElementById('color-hex').textContent = hex;
+
+    // Update header
+    document.getElementById('resume-header').style.background =
+      `linear-gradient(135deg, ${hex}, ${adjustColor(hex, 30)})`;
+
+    // Update section labels
+    document.querySelectorAll('.resume-section-label').forEach(el => {
+      el.style.color       = hex;
+      el.style.borderColor = hex;
+    });
+
+    // Update skill badges
+    renderSkills();
+
+    // Update toolbar color buttons
+    document.querySelectorAll('.toolbar-color').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    document.querySelectorAll('[data-color]').forEach(b => {
+      if (b.dataset.color === hex) b.classList.add('active');
+    });
+  }
+
+  function adjustColor(hex, amount) {
+    const num = parseInt(hex.replace('#',''), 16);
+    const r = Math.min(255, (num >> 16) + amount);
+    const g = Math.min(255, ((num >> 8) & 0xff) + amount);
+    const b = Math.min(255, (num & 0xff) + amount);
+    return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6,'0');
+  }
+
+  function setFont(val) {
+    state.font = val;
+    document.getElementById('resume-paper').style.fontFamily = `'${val}', sans-serif`;
+    document.getElementById('toolbar-font').value = val;
+    document.getElementById('font-select').value  = val;
+  }
+
+  function setFontSize(val) {
+    state.fontSize = val;
+    document.getElementById('font-size-val').textContent = val;
+    document.getElementById('resume-paper').style.fontSize = val + 'px';
+  }
+
+  function setSpacing(val) {
+    state.spacing = val;
+    document.getElementById('spacing-val').textContent = parseFloat(val).toFixed(1);
+    document.getElementById('resume-paper').style.lineHeight = val;
+  }
+
+  function setLayout(type, btn) {
+    state.layout = type;
+    document.querySelectorAll('#layout-single, #layout-double').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const body = document.getElementById('resume-body');
+    if (type === 'double') {
+      body.style.display = 'grid';
+      body.style.gridTemplateColumns = '1fr 1fr';
+      body.style.gap = '20px';
+    } else {
+      body.style.display = '';
+      body.style.gridTemplateColumns = '';
+    }
+  }
+
+  /* ── Zoom ── */
+  let zoom = 1;
+  function zoomIn()  { zoom = Math.min(1.5, zoom + 0.1); applyZoom(); }
+  function zoomOut() { zoom = Math.max(0.5, zoom - 0.1); applyZoom(); }
+  function applyZoom() {
+    document.getElementById('resume-paper').style.transform = `scale(${zoom})`;
+    document.getElementById('resume-paper').style.transformOrigin = 'top center';
+    document.getElementById('zoom-label').textContent = Math.round(zoom * 100) + '%';
+  }
+
+  /* ── Undo/Redo ── */
+  function undoResume() { window.RW?.Toast?.info('Undo — Ctrl+Z bhi kaam karta hai!'); }
+  function redoResume() { window.RW?.Toast?.info('Redo — Ctrl+Y bhi kaam karta hai!'); }
+  function execCmd(cmd) { document.execCommand(cmd, false, null); }
+
+  /* ── Sync contenteditable to form ── */
+  function syncFromDisplay(field, el) {
+    if (field === 'name') {
+      const parts = el.textContent.trim().split(' ');
+      const fi = document.getElementById('f-fname');
+      const li = document.getElementById('f-lname');
+      if (fi) fi.value = parts[0] || '';
+      if (li) li.value = parts.slice(1).join(' ') || '';
+    }
+    if (field === 'role')    { const el2 = document.getElementById('f-role');    if (el2) el2.value = el.textContent; }
+    if (field === 'summary') { const el2 = document.getElementById('f-summary'); if (el2) el2.value = el.textContent; }
+    autoSave();
+  }
+
+  /* ── Photo Upload ── */
+  function triggerPhotoUpload() {
+    document.getElementById('photo-input').click();
+  }
+
+  function handlePhotoUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      window.RW?.Toast?.error('Photo 2MB se bada hai!');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const src = ev.target.result;
+      const avatar = document.getElementById('resume-avatar-display');
+      avatar.innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;
+      document.getElementById('photo-preview-mini').innerHTML =
+        `<img src="${src}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;
+      window.RW?.Toast?.success('Photo laga di! 📸');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /* ── AI Card Toggle ── */
+  function toggleAICard(id) {
+    const card = document.getElementById('card-' + id);
+    card.classList.toggle('open');
+  }
+
+  /* ── Auto Save ── */
+  let saveTimer;
+  function autoSave() {
+    const dot  = document.getElementById('save-dot');
+    const text = document.getElementById('save-text');
+    if (dot)  dot.style.background = 'var(--warning)';
+    if (text) text.textContent = 'Saving...';
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      // Save to localStorage
+      try {
+        const data = { name: document.getElementById('disp-name')?.textContent };
+        localStorage.setItem('rw_draft', JSON.stringify(data));
+      } catch(e) {}
+      if (dot)  dot.style.background = 'var(--success)';
+      if (text) text.textContent = 'Auto-saved ✓';
+    }, 1200);
+  }
+
+  /* ── Preview ── */
+  function previewResume() {
+    window.open('', '_blank').document.write(
+      `<html><head><title>Resume Preview</title></head><body style="margin:0">` +
+      document.getElementById('resume-paper').outerHTML +
+      `  <script src="assets/js/mobile.js"></script>
+</body></html>`
+    );
+  }
+
+  /* ── PDF Download ── */
+  function downloadPDF() {
+    window.RW?.Toast?.info('PDF download ho raha hai... ⏳');
+    setTimeout(() => {
+      window.print();
+    }, 500);
+  }
+
+  /* ── Share Link ── */
+  function generateShareLink() {
+    const code = Math.random().toString(36).substr(2,8);
+    state.shareLink = `https://banaocv.in/r/${code}`;
+    document.getElementById('share-link-text').textContent = state.shareLink;
+    document.getElementById('share-link-wrap').style.display = 'block';
+
+    const card = document.getElementById('card-whatsapp');
+    if (!card.classList.contains('open')) card.classList.add('open');
+
+    window.RW?.Toast?.success('Share link ready hai! 🔗');
+  }
+
+  function copyShareLink() {
+    window.RW?.Clipboard?.copy(state.shareLink || 'banaocv.in', 'Link copy ho gaya!');
+  }
+
+  function shareWhatsApp() {
+    const link = state.shareLink || 'https://banaocv.in';
+    const msg  = encodeURIComponent(
+      `Mera professional resume dekho: ${link}\n\nBanaoCV se banaya - India ka best free AI Resume Builder! 🚀`
+    );
+    window.open(`https://wa.me/?text=${msg}`, '_blank');
+  }
+
+  function shareEmail() {
+    const link = state.shareLink || 'https://banaocv.in';
+    window.location.href = `mailto:?subject=Mera Resume Dekho&body=Mera resume: ${link}`;
+  }
+
+  function shareLinkedIn() {
+    const link = state.shareLink || 'https://banaocv.in';
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(link)}`, '_blank');
+  }
+
+  function downloadQR() {
+    window.RW?.Toast?.info('QR Code generate ho raha hai...');
+    setTimeout(() => window.RW?.Toast?.success('QR Code download ho gaya! 📲'), 1500);
+  }
+
+  /* ── Copy Cover Letter ── */
+  function copyCoverLetter() {
+    const text = document.getElementById('cover-letter-text')?.textContent;
+    window.RW?.Clipboard?.copy(text, 'Cover letter copy ho gaya! ✓');
+  }
+
+  function downloadCoverLetter() {
+    const text = document.getElementById('cover-letter-text')?.textContent;
+    const blob = new Blob([text], { type: 'text/plain' });
+    const a    = document.createElement('a');
+    a.href     = URL.createObjectURL(blob);
+    a.download = 'cover-letter.txt';
+    a.click();
+    window.RW?.Toast?.success('Cover letter download ho gayi!');
+  }
+
+  /* ── Mobile tabs ── */
+  function mobileTab(name, btn) {
+    document.querySelectorAll('.mobile-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    const left   = document.querySelector('.editor-left-panel');
+    const canvas = document.querySelector('.editor-canvas-wrap');
+    const right  = document.querySelector('.editor-right-panel');
+
+    left.style.display   = name === 'edit'    ? 'flex' : 'none';
+    canvas.style.display = name === 'preview' ? 'flex' : 'none';
+    right.style.display  = name === 'ai'      ? 'flex' : 'none';
+
+    if (name === 'design') {
+      left.style.display = 'flex';
+      switchLeftTab('design', document.querySelector('[data-tab="design"]'));
+    }
+  }
+
+  /* ── Sections Toggle init ── */
+  function initSectionsPanel() {
+    const sections = [
+      { id: 'sec-summary',    label: '📝 Summary',    on: true },
+      { id: 'sec-experience', label: '💼 Experience', on: true },
+      { id: 'sec-education',  label: '🎓 Education',  on: true },
+      { id: 'sec-skills',     label: '⚡ Skills',      on: true },
+      { id: 'sec-projects',   label: '🚀 Projects',    on: true },
+    ];
+
+    const toggleList = document.getElementById('sections-toggle-list');
+    const orderList  = document.getElementById('sections-order-list');
+    if (!toggleList) return;
+
+    sections.forEach(sec => {
+      // Toggle
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)';
+      row.innerHTML = `
+        <span style="font-size:0.875rem;color:var(--text-2)">${sec.label}</span>
+        <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer">
+          <input type="checkbox" ${sec.on ? 'checked' : ''} onchange="toggleSection('${sec.id}',this.checked)"
+                 style="opacity:0;width:0;height:0;position:absolute"/>
+          <span style="position:absolute;inset:0;background:${sec.on ? 'var(--brand)' : 'var(--border)'};border-radius:20px;transition:0.3s">
+            <span style="position:absolute;left:${sec.on ? '18px' : '2px'};top:2px;width:16px;height:16px;background:white;border-radius:50%;transition:0.3s"></span>
+          </span>
+        </label>`;
+      toggleList.appendChild(row);
+
+      // Order
+      const orderRow = document.createElement('div');
+      orderRow.style.cssText = 'display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg);border-radius:var(--r);border:1px solid var(--border);cursor:grab';
+      orderRow.innerHTML = `<span style="color:var(--text-4);font-size:0.8rem">⠿</span><span style="font-size:0.875rem">${sec.label}</span>`;
+      orderList.appendChild(orderRow);
+    });
+  }
+
+  function toggleSection(id, show) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = show ? '' : 'none';
+  }
+
+  /* ── Template swatches ── */
+  function initTemplateSwatch() {
+    const colors = ['#1B3A6B','#0f172a','#064e3b','#7c3aed','#0c4a6e','#7c2d12','#374151','#991b1b'];
+    const grid   = document.getElementById('inline-tpl-grid');
+    if (!grid) return;
+    colors.forEach((c, i) => {
+      const el   = document.createElement('div');
+      el.className = 'tpl-swatch' + (i === 0 ? ' active' : '');
+      el.style.background = `linear-gradient(135deg, ${c}, ${adjustColor(c, 30)})`;
+      el.onclick = () => {
+        document.querySelectorAll('.tpl-swatch').forEach(s => s.classList.remove('active'));
+        el.classList.add('active');
+        setColor(c, null);
+      };
+      grid.appendChild(el);
+    });
+  }
+
+  /* ── URL param — load template ── */
+  function loadTemplateFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    const t = params.get('t');
+    if (!t) return;
+    const colorMap = {
+      'dark-pro':       '#0f172a',
+      'tech-dark':      '#0d1117',
+      'midnight-gold':  '#1a1a2e',
+      'creative-split': '#F5A623',
+      'bold-modern':    '#7c3aed',
+      'saffron-bold':   '#ea580c',
+      'medical-white':  '#0c4a6e',
+      'govt-formal':    '#1B3A6B',
+    };
+    if (colorMap[t]) setColor(colorMap[t], null);
+    window.RW?.Toast?.success(`Template "${t}" load ho gaya! ✓`);
+  }
+
+  /* ── Init ── */
+  document.addEventListener('DOMContentLoaded', () => {
+    renderSkillTags();
+    initSectionsPanel();
+    initTemplateSwatch();
+    loadTemplateFromURL();
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        autoSave();
+        window.RW?.Toast?.success('Saved! ✓');
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+        e.preventDefault();
+        downloadPDF();
+      }
+    });
+  });
+  </script>
+  <script src="assets/js/mobile.js"></script>
+</body>
+</html>

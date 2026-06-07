@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="theme-color" content="#1B3A6B" />
+  <meta name="description" content="BanaoCV Pricing — Free se shuru karo, ₹99 mein premium unlock karo. Koi subscription nahi, ek baar ki payment." />
+  <title>Pricing — BanaoCV | Free & Premium Plans</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231B3A6B'/><text x='16' y='23' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='900' font-size='18'>R</text></svg>" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/animations.css" />
+  <link rel="stylesheet" href="assets/css/mobile.css" />
+  <style>
+    /* ── Pricing page specific ── */
+    .pricing-hero {
+      background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-light) 100%);
+      padding: 72px 0 56px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .pricing-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .pricing-hero-inner { position: relative; z-index: 2; }
+    .pricing-hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: var(--white);
+      margin-bottom: 14px;
+    }
+    .pricing-hero p {
+      color: rgba(255,255,255,0.75);
+      font-size: 1.0625rem;
+      max-width: 500px;
+      margin: 0 auto 28px;
+    }
+
+    /* Toggle */
+    .billing-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: var(--r-full);
+      padding: 6px 20px;
+    }
+    .billing-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      transition: color var(--t);
+      cursor: pointer;
+    }
+    .billing-label.active { color: var(--white); }
+    .toggle-switch {
+      width: 44px;
+      height: 24px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 24px;
+      position: relative;
+      cursor: pointer;
+      transition: background var(--t);
+    }
+    .toggle-switch.on { background: var(--gold); }
+    .toggle-dot {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: var(--white);
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+      transition: left var(--t-spring);
+    }
+    .toggle-switch.on .toggle-dot { left: 23px; }
+    .save-badge {
+      background: var(--gold);
+      color: var(--brand-dark);
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: var(--r-full);
+      margin-left: 4px;
+    }
+
+    /* Pricing cards */
+    .pricing-section { padding: 64px 0 80px; }
+    .pricing-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      align-items: start;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    @media (max-width: 900px) {
+      .pricing-cards-grid {
+        grid-template-columns: 1fr;
+        max-width: 440px;
+      }
+    }
+
+    .p-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 36px 28px;
+      position: relative;
+      transition: all var(--t-slow);
+    }
+    .p-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-6px);
+    }
+    .p-card.popular {
+      border-color: var(--brand);
+      box-shadow: var(--shadow-md);
+      transform: scale(1.04);
+    }
+    .p-card.popular:hover {
+      transform: scale(1.04) translateY(-6px);
+    }
+    @media (max-width: 900px) {
+      .p-card.popular { transform: none; order: -1; }
+      .p-card.popular:hover { transform: translateY(-4px); }
+    }
+
+    .popular-ribbon {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--brand), var(--brand-light));
+      color: var(--white);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 5px 20px;
+      border-radius: var(--r-full);
+      white-space: nowrap;
+      box-shadow: var(--shadow-brand);
+    }
+
+    .p-plan {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-3);
+      margin-bottom: 6px;
+    }
+
+    .p-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+    .p-currency { font-size: 1.25rem; font-weight: 700; color: var(--brand-dark); }
+    .p-amount {
+      font-family: var(--font-heading);
+      font-size: 3.25rem;
+      font-weight: 800;
+      color: var(--brand-dark);
+      line-height: 1;
+      transition: all var(--t);
+    }
+    .p-period { font-size: 0.875rem; color: var(--text-3); }
+    .p-original {
+      font-size: 0.875rem;
+      color: var(--text-4);
+      text-decoration: line-through;
+      margin-left: 6px;
+    }
+
+    .p-desc {
+      font-size: 0.875rem;
+      color: var(--text-3);
+      margin-bottom: 24px;
+      margin-top: 6px;
+      line-height: 1.6;
+    }
+
+    .p-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+
+    .p-features {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .p-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--text-2);
+      line-height: 1.5;
+    }
+    .p-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .p-check.yes  { background: var(--success-light); color: var(--success); }
+    .p-check.no   { background: var(--bg-2); color: var(--text-4); }
+    .p-check.gold { background: var(--gold-xlight); color: var(--gold-dark); }
+
+    .p-feature.muted { color: var(--text-4); }
+
+    /* Feature comparison table */
+    .compare-section { padding: 0 0 80px; }
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .compare-table th {
+      background: var(--brand-dark);
+      color: var(--white);
+      padding: 16px 20px;
+      text-align: left;
+      font-size: 0.875rem;
+      font-weight: 700;
+    }
+    .compare-table th:not(:first-child) { text-align: center; }
+    .compare-table td {
+      padding: 14px 20px;
+      font-size: 0.875rem;
+      color: var(--text-2);
+      border-bottom: 1px solid var(--border);
+    }
+    .compare-table td:not(:first-child) { text-align: center; }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:nth-child(even) td { background: var(--bg); }
+    .compare-table .cat-row td {
+      background: var(--brand-xlight);
+      color: var(--brand);
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .compare-yes  { color: var(--success); font-size: 1.1rem; }
+    .compare-no   { color: var(--text-4); font-size: 1.1rem; }
+    .compare-gold { color: var(--gold-dark); font-weight: 700; font-size: 0.8125rem; }
+
+    @media (max-width: 768px) {
+      .compare-section { display: none; }
+    }
+
+    /* FAQ */
+    .pricing-faq { padding: 0 0 80px; }
+
+    /* Guarantee */
+    .guarantee-card {
+      background: linear-gradient(135deg, var(--success-light), #d1fae5);
+      border: 1.5px solid var(--success);
+      border-radius: var(--r-xl);
+      padding: 36px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      max-width: 700px;
+      margin: 0 auto 64px;
+    }
+    @media (max-width: 640px) {
+      .guarantee-card { flex-direction: column; text-align: center; gap: 16px; padding: 28px 20px; }
+    }
+    .guarantee-icon {
+      font-size: 3rem;
+      flex-shrink: 0;
+    }
+    .guarantee-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--success);
+      margin-bottom: 6px;
+    }
+    .guarantee-desc {
+      font-size: 0.9375rem;
+      color: #065f46;
+      line-height: 1.7;
+    }
+
+    /* Trust badges */
+    .trust-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+      padding: 32px 0 0;
+      border-top: 1px solid var(--border);
+      margin-top: 48px;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-3);
+    }
+    .trust-icon { font-size: 1.25rem; }
+
+    /* Payment methods */
+    .payment-methods {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .payment-badge {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-3);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+  </style>
+</head>
+<body>
+  <script src="components/nav.js"></script>
+
+  <!-- ══ HERO ══ -->
+  <section class="pricing-hero">
+    <div class="container pricing-hero-inner">
+      <span class="badge badge-gold" style="margin-bottom:16px;font-size:0.875rem">
+        💰 Simple Pricing
+      </span>
+      <h1>Seedha, Simple Pricing</h1>
+      <p>Free mein shuru karo — jab ready ho tab ₹99 mein sab unlock karo. Koi subscription nahi.</p>
+
+      <!-- Billing toggle -->
+      <div class="billing-toggle" id="billing-toggle">
+        <span class="billing-label active" id="lbl-monthly">Ek Baar</span>
+        <div class="toggle-switch" id="toggle-sw" onclick="toggleBilling()">
+          <div class="toggle-dot"></div>
+        </div>
+        <span class="billing-label" id="lbl-annual">
+          Annual <span class="save-badge">40% OFF</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PRICING CARDS ══ -->
+  <section class="pricing-section">
+    <div class="container">
+
+      <div class="pricing-cards-grid" data-stagger>
+
+        <!-- FREE -->
+        <div class="p-card" data-reveal="up">
+          <p class="p-plan">Free Forever</p>
+          <div class="p-price-row">
+            <span class="p-currency">₹</span>
+            <span class="p-amount" id="free-price">0</span>
+          </div>
+          <p class="p-desc">Shuru karne ke liye bilkul kafi hai</p>
+
+          <a href="editor.html" class="btn btn-ghost btn-lg"
+             style="width:100%;justify-content:center;margin-bottom:24px">
+            Free Mein Shuru Karo
+          </a>
+
+          <div class="p-divider"></div>
+
+          <div class="p-features">
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              5 Free Templates
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              AI Resume Generator (3 baar/month)
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              PDF Download (1 baar)
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              Basic Editing
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              1 Resume Save
+            </div>
+            <div class="p-feature muted">
+              <span class="p-check no">✕</span>
+              Premium Templates (50+)
+            </div>
+            <div class="p-feature muted">
+              <span class="p-check no">✕</span>
+              ATS Score Checker
+            </div>
+            <div class="p-feature muted">
+              <span class="p-check no">✕</span>
+              Cover Letter Generator
+            </div>
+            <div class="p-feature muted">
+              <span class="p-check no">✕</span>
+              JD Match Optimizer
+            </div>
+            <div class="p-feature muted">
+              <span class="p-check no">✕</span>
+              Word File Download
+            </div>
+          </div>
+        </div>
+
+        <!-- PREMIUM — POPULAR -->
+        <div class="p-card popular" data-reveal="up">
+          <div class="popular-ribbon">⭐ Sabse Popular</div>
+
+          <p class="p-plan">Premium</p>
+          <div class="p-price-row">
+            <span class="p-currency">₹</span>
+            <span class="p-amount" id="premium-price">99</span>
+            <span class="p-original" id="premium-original" style="display:none">₹199</span>
+          </div>
+          <p class="p-desc" id="premium-desc">Ek baar pay karo — hamesha use karo</p>
+
+          <a href="#" class="btn btn-gold btn-lg btn-shine"
+             style="width:100%;justify-content:center;margin-bottom:24px"
+             onclick="startPayment('premium')">
+            ₹99 Mein Upgrade Karo 🚀
+          </a>
+
+          <div class="p-divider"></div>
+
+          <div class="p-features">
+            <div class="p-feature">
+              <span class="p-check gold">★</span>
+              <strong>50+ Premium Templates</strong>
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              AI Resume Generator (Unlimited)
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              Unlimited PDF Downloads
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              Word File (.docx) Download
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              Full Canva-like Editor
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              ATS Score Checker
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              Cover Letter Generator
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              JD Match Optimizer
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              WhatsApp Share Link
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              Unlimited Resumes Save
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              Photo Upload
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              Priority Support
+            </div>
+          </div>
+
+          <p style="text-align:center;font-size:0.8rem;color:var(--text-3)">
+            🔒 Secure payment via Razorpay
+          </p>
+        </div>
+
+        <!-- PRO TEAM -->
+        <div class="p-card" data-reveal="up">
+          <p class="p-plan">Pro Team</p>
+          <div class="p-price-row">
+            <span class="p-currency">₹</span>
+            <span class="p-amount" id="pro-price">299</span>
+            <span class="p-period">/month</span>
+          </div>
+          <p class="p-desc" id="pro-desc">Placement cells aur teams ke liye</p>
+
+          <a href="mailto:pro@banaocv.in" class="btn btn-outline btn-lg"
+             style="width:100%;justify-content:center;margin-bottom:24px">
+            Sales Team Se Baat Karo
+          </a>
+
+          <div class="p-divider"></div>
+
+          <div class="p-features">
+            <div class="p-feature">
+              <span class="p-check gold">★</span>
+              <strong>Premium ka sab kuch</strong>
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              Team members (10 tak)
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              Bulk resume generation
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              Custom branding remove
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              Analytics Dashboard
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              API Access
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              Dedicated Account Manager
+            </div>
+            <div class="p-feature">
+              <span class="p-check yes">✓</span>
+              SLA Support (24hr response)
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Guarantee -->
+      <div style="margin-top:56px" data-reveal="up">
+        <div class="guarantee-card">
+          <div class="guarantee-icon">🛡️</div>
+          <div>
+            <div class="guarantee-title">7 Din Ka Full Refund Guarantee</div>
+            <div class="guarantee-desc">
+              Agar premium se khush nahi ho — koi sawaal nahi, poora paisa wapas.
+              Bas <strong>support@banaocv.in</strong> pe email karo.
+              24 ghante mein process hoga.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trust strip -->
+      <div class="trust-strip" data-reveal="up">
+        <div class="trust-item">
+          <span class="trust-icon">🔒</span> SSL Secure Payment
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">⚡</span> Instant Access
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">🇮🇳</span> Made in India
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">💳</span> UPI / Card / NetBanking
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">📞</span> 24/7 Support
+        </div>
+      </div>
+
+      <!-- Payment methods -->
+      <div class="payment-methods" data-reveal="up">
+        <div class="payment-badge">💳 Visa / Mastercard</div>
+        <div class="payment-badge">📱 UPI / PhonePe / GPay</div>
+        <div class="payment-badge">🏦 Net Banking</div>
+        <div class="payment-badge">💰 Paytm</div>
+        <div class="payment-badge">🏪 EMI Available</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ COMPARISON TABLE ══ -->
+  <section class="compare-section">
+    <div class="container">
+      <div class="section-header" data-reveal="up">
+        <span class="eyebrow">📊 Comparison</span>
+        <h2>Kya Kya Milega — Full Breakdown</h2>
+      </div>
+
+      <div style="overflow-x:auto;border-radius:var(--r-xl);box-shadow:var(--shadow-sm)">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th style="width:40%">Feature</th>
+              <th>Free</th>
+              <th style="background:var(--brand)">Premium ₹99</th>
+              <th>Pro Team</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="cat-row"><td colspan="4">📄 Templates & Design</td></tr>
+            <tr><td>Templates</td><td>5</td><td class="compare-gold">50+</td><td class="compare-gold">50+</td></tr>
+            <tr><td>ATS-Friendly Templates</td><td class="compare-yes">✓</td><td class="compare-yes">✓</td><td class="compare-yes">✓</td></tr>
+            <tr><td>Custom Color Theme</td><td class="compare-no">✕</td><td class="compare-yes">✓</td><td class="compare-yes">✓</td></tr>
+            <tr><td>Font Change</td><td class="compare-no">✕</td><td class="compare-yes">✓</td><td class="compare-yes">✓</td></tr>
+            <tr><td>Photo Upload</td><td class="compare-no">✕</td><td class="compare-yes">✓</td><td class="compare-yes">✓</td></tr>
+
+            <tr class="cat-row"><td colspan="4">🤖 AI Features</td></tr>
+            <tr><td>Hindi → Resume AI</td><td class="compare-gold">3/month</td><td class="compare-gold">Unlimited</td><td class="compare-gold">Unlimited</td></tr>
+            <tr><td>Resume Score Checker</td><td class="compare-no">✕</td><td class="compare-yes">✓</td><td class="compare-yes">✓</td></tr>
+            <tr><td>JD Match Optimizer</td><td class="compare-no">✕</td><td class="compare-yes">✓</td><td class="compare-yes">✓</td></tr>
+            <tr><td>Cover Letter Generator</td><td class="compare-no">✕</td><td class="compare-yes">✓</td><td class="compare-yes">✓</td></tr>
+            <tr><td>AI Improvement Tips</td><td class="compare-no">✕</td><td class="compare-yes">✓</td><td class="compare-yes">✓</td></tr>
+
+            <tr class="cat-row"><td colspan="4">💾 Download & Share</td></tr>
+            <tr><td>PDF Download</td><td class="compare-gold">1 baar</td><td class="compare-gold">Unlimited</td><td class="compare-gold">Unlimited</td></tr>
+            <tr><td>Word (.docx) Download</td><td class="compare-no">✕</td><td class="compare-yes">✓</td><td class="compare-yes">✓</td></tr>
+            <tr><td>WhatsApp Share Link</td><td class="compare-no">✕</td><td class="compare-yes">✓</td><td class="compare-yes">✓</td></tr>
+            <tr><td>QR Code Generate</td><td class="compare-no">✕</td><td class="compare-yes">✓</td><td class="compare-yes">✓</td></tr>
+
+            <tr class="cat-row"><td colspan="4">👤 Account</td></tr>
+            <tr><td>Resumes Save</td><td class="compare-gold">1</td><td class="compare-gold">Unlimited</td><td class="compare-gold">Unlimited</td></tr>
+            <tr><td>Dashboard</td><td class="compare-no">✕</td><td class="compare-yes">✓</td><td class="compare-yes">✓</td></tr>
+            <tr><td>Team Members</td><td class="compare-no">✕</td><td class="compare-no">✕</td><td class="compare-gold">10</td></tr>
+            <tr><td>Analytics</td><td class="compare-no">✕</td><td class="compare-no">✕</td><td class="compare-yes">✓</td></tr>
+
+            <tr class="cat-row"><td colspan="4">🛎️ Support</td></tr>
+            <tr><td>Email Support</td><td class="compare-yes">✓</td><td class="compare-yes">✓</td><td class="compare-yes">✓</td></tr>
+            <tr><td>Priority Support</td><td class="compare-no">✕</td><td class="compare-yes">✓</td><td class="compare-yes">✓</td></tr>
+            <tr><td>Dedicated Manager</td><td class="compare-no">✕</td><td class="compare-no">✕</td><td class="compare-yes">✓</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FAQ ══ -->
+  <section class="pricing-faq">
+    <div class="container">
+      <div class="section-header" data-reveal="up">
+        <span class="eyebrow">❓ FAQ</span>
+        <h2>Pricing Ke Baare Mein Sawaal</h2>
+      </div>
+
+      <div class="faq-grid" data-stagger>
+        <div class="faq-item">
+          <button class="faq-question">
+            Kya ₹99 ek baar ka hai ya monthly?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>₹99 ek baar ki payment hai — koi subscription nahi, koi renewal nahi. Ek baar pay karo, hamesha ke liye access milega. Annual plan mein ₹59/month padta hai.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            Refund milega kya?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Haan! 7 din ka full refund guarantee hai. Agar premium se khush nahi ho — support@banaocv.in pe email karo. Koi sawaal nahi puchha jaayega, 24 ghante mein refund process hoga.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            Kaunse payment methods accept hote hain?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>UPI (PhonePe, GPay, Paytm), Debit/Credit Card (Visa, Mastercard, RuPay), Net Banking — sab accepted hain. Payment Razorpay ke through hoti hai jo India ka #1 secure gateway hai.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            Annual plan mein kya milega?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Annual plan mein premium ka sab kuch milega — sirf ₹699/year yani ₹58/month. Ek baar plan se 40% sasta. Plus early access to new features milega.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            Free plan mein kya kya milta hai?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Free mein 5 templates, 3 AI resumes per month, 1 PDF download, basic editing aur 1 resume save milta hai. Shuru karne ke liye kafi hai.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            College placement cell ke liye koi plan hai?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Haan! Pro Team plan mein 10 members tak team add kar sakte ho, bulk resume generation, analytics aur dedicated support milta hai. pro@banaocv.in pe contact karo special pricing ke liye.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            Payment ke baad turant access milega?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Haan! Payment successful hote hi account automatically premium ho jaata hai. Koi wait nahi, koi manual process nahi. Turant sab features unlock ho jaate hain.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            Mera data safe hai kya?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Bilkul safe hai. Tumhara card/UPI details humare server pe store nahi hota — Razorpay handle karta hai. Resume data encrypted aur secure hai. Kisi ke saath share nahi hota.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CTA ══ -->
+  <section class="cta-banner section-sm">
+    <div class="cta-banner-grid"></div>
+    <div class="cta-banner-blob-1"></div>
+    <div class="cta-banner-blob-2"></div>
+    <div class="cta-banner-inner" data-reveal="up">
+      <h2>Aaj Hi Shuru Karo — Free Mein</h2>
+      <p>Credit card ki zarurat nahi. 2 minute mein resume ready.</p>
+      <div class="cta-banner-btns">
+        <a href="editor.html" class="btn btn-gold btn-xl btn-shine hover-arrow">
+          Free Resume Banao
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#" class="btn btn-lg" onclick="startPayment('premium')"
+           style="background:rgba(255,255,255,0.1);color:white;border:1.5px solid rgba(255,255,255,0.3)">
+          ₹99 Mein Premium Lo
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PAYMENT MODAL ══ -->
+  <div class="modal-overlay" id="payment-modal">
+    <div class="modal" style="max-width:420px">
+      <button class="modal-close" data-modal-close>✕</button>
+      <div style="text-align:center;margin-bottom:24px">
+        <div style="font-size:2.5rem;margin-bottom:8px">🔒</div>
+        <h2 style="font-size:1.5rem;margin-bottom:6px">Premium Unlock Karo</h2>
+        <p style="color:var(--text-3);font-size:0.9rem">Ek baar ki payment — hamesha ka access</p>
+      </div>
+
+      <div style="background:var(--bg);border-radius:var(--r-lg);padding:20px;margin-bottom:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <span style="font-weight:600;color:var(--text-2)">Premium Plan</span>
+          <span style="font-family:var(--font-heading);font-size:1.5rem;font-weight:800;color:var(--brand-dark)" id="modal-price">₹99</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:0.8125rem;color:var(--text-3)">
+            <span style="color:var(--success)">✓</span> 50+ Premium Templates
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:0.8125rem;color:var(--text-3)">
+            <span style="color:var(--success)">✓</span> Unlimited AI Resumes
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:0.8125rem;color:var(--text-3)">
+            <span style="color:var(--success)">✓</span> 7 Din Refund Guarantee
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-gold btn-lg btn-shine"
+              style="width:100%;justify-content:center"
+              onclick="processRazorpay()">
+        💳 Secure Payment Karo
+      </button>
+
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px">
+        <svg width="14" height="14" fill="var(--success)" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        <span style="font-size:0.75rem;color:var(--text-4)">SSL Secure · Razorpay Protected · 100% Safe</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="components/footer.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/payment.js"></script>
+  <script src="assets/js/mobile.js"></script>
+
+  <script>
+    /* ── Billing Toggle ── */
+    let isAnnual = false;
+
+    function toggleBilling() {
+      isAnnual = !isAnnual;
+      const sw  = document.getElementById('toggle-sw');
+      const lm  = document.getElementById('lbl-monthly');
+      const la  = document.getElementById('lbl-annual');
+      sw.classList.toggle('on', isAnnual);
+      lm.classList.toggle('active', !isAnnual);
+      la.classList.toggle('active',  isAnnual);
+
+      // Update prices
+      if (isAnnual) {
+        document.getElementById('premium-price').textContent    = '699';
+        document.getElementById('premium-original').style.display = '';
+        document.getElementById('premium-desc').textContent     = '₹58/month · 40% savings';
+        document.getElementById('pro-price').textContent        = '2499';
+        document.getElementById('pro-desc').textContent         = 'Annual billing · Save ₹1089';
+        document.getElementById('modal-price').textContent      = '₹699';
+      } else {
+        document.getElementById('premium-price').textContent    = '99';
+        document.getElementById('premium-original').style.display = 'none';
+        document.getElementById('premium-desc').textContent     = 'Ek baar pay karo — hamesha use karo';
+        document.getElementById('pro-price').textContent        = '299';
+        document.getElementById('pro-desc').textContent         = 'Placement cells aur teams ke liye';
+        document.getElementById('modal-price').textContent      = '₹99';
+      }
+    }
+
+    /* ── Start Payment ── */
+    function startPayment(plan) {
+      window.RW?.Modal?.open('payment-modal');
+    }
+
+    /* ── Razorpay ── */
+    function processRazorpay() {
+      const amount = isAnnual ? 699 : 99;
+
+      // If Razorpay script loaded
+      if (typeof Razorpay !== 'undefined') {
+        const options = {
+          key         : 'YOUR_RAZORPAY_KEY',
+          amount      : amount * 100,
+          currency    : 'INR',
+          name        : 'BanaoCV',
+          description : `Premium Plan — ₹${amount}`,
+          image       : '',
+          prefill     : {
+            name  : '',
+            email : '',
+            contact: '',
+          },
+          theme       : { color: '#1B3A6B' },
+          handler     : function(response) {
+            window.RW?.Modal?.close('payment-modal');
+            window.RW?.Toast?.success('Payment successful! Premium unlock ho gaya 🎉');
+            setTimeout(() => window.location.href = 'dashboard.html', 1500);
+          },
+          modal: {
+            ondismiss: function() {
+              window.RW?.Toast?.info('Payment cancel ho gayi.');
+            }
+          }
+        };
+        const rzp = new Razorpay(options);
+        rzp.open();
+      } else {
+        // Demo mode
+        window.RW?.Toast?.success('Demo: Payment successful! 🎉 (Real mein Razorpay key daalna)');
+        setTimeout(() => {
+          window.RW?.Modal?.close('payment-modal');
+        }, 2000);
+      }
+    }
+  </script>
+</body>
+</html>

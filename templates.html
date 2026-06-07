@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="theme-color" content="#1B3A6B" />
+  <meta name="description" content="BanaoCV — 50+ Professional Resume Templates. Fresher, Experienced, Creative, Govt, IT — sab ke liye. Free aur Premium templates." />
+  <title>Templates — BanaoCV | 50+ Professional Resume Templates</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231B3A6B'/><text x='16' y='23' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='900' font-size='18'>R</text></svg>" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/animations.css" />
+  <link rel="stylesheet" href="assets/css/mobile.css" />
+  <style>
+    /* ── Templates page specific ── */
+    .templates-page-hero {
+      background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-light) 100%);
+      padding: 72px 0 56px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    .templates-page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .templates-page-hero h1 {
+      color: var(--white);
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .templates-page-hero p {
+      color: rgba(255,255,255,0.75);
+      font-size: 1.0625rem;
+      max-width: 520px;
+      margin: 0 auto 28px;
+      position: relative;
+    }
+
+    /* Search bar */
+    .templates-search-wrap {
+      position: relative;
+      max-width: 460px;
+      margin: 0 auto;
+      z-index: 2;
+    }
+    .templates-search {
+      width: 100%;
+      padding: 14px 48px 14px 20px;
+      border-radius: var(--r-full);
+      border: 2px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(12px);
+      color: var(--white);
+      font-size: 0.9375rem;
+      font-family: var(--font-body);
+      transition: all var(--t);
+    }
+    .templates-search::placeholder { color: rgba(255,255,255,0.5); }
+    .templates-search:focus {
+      background: rgba(255,255,255,0.2);
+      border-color: var(--gold);
+      outline: none;
+    }
+    .templates-search-icon {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,0.6);
+      font-size: 1.1rem;
+      pointer-events: none;
+    }
+
+    /* Filter sidebar */
+    .templates-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 32px;
+      align-items: start;
+      padding: 48px 0 80px;
+    }
+    @media (max-width: 900px) {
+      .templates-layout { grid-template-columns: 1fr; }
+      .templates-sidebar { display: none; }
+      .templates-mobile-filters { display: flex !important; }
+    }
+
+    .templates-sidebar {
+      position: sticky;
+      top: calc(var(--nav-h) + 16px);
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 24px;
+    }
+    .sidebar-title {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+    }
+    .sidebar-filters {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 24px;
+    }
+    .sidebar-filter {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 12px;
+      border-radius: var(--r);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: all var(--t);
+      border: none;
+      background: none;
+      text-align: left;
+      width: 100%;
+    }
+    .sidebar-filter:hover { background: var(--bg); color: var(--brand); }
+    .sidebar-filter.active {
+      background: var(--brand-xlight);
+      color: var(--brand);
+      font-weight: 600;
+    }
+    .sidebar-filter .count {
+      font-size: 0.75rem;
+      background: var(--bg-2);
+      color: var(--text-3);
+      padding: 2px 7px;
+      border-radius: var(--r-full);
+    }
+    .sidebar-filter.active .count {
+      background: var(--brand);
+      color: var(--white);
+    }
+
+    /* Mobile filter pills */
+    .templates-mobile-filters {
+      display: none;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 16px 0 8px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .templates-mobile-filters::-webkit-scrollbar { display: none; }
+
+    /* Sort + count bar */
+    .templates-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .templates-count {
+      font-size: 0.9rem;
+      color: var(--text-3);
+    }
+    .templates-count strong { color: var(--brand-dark); }
+    .sort-select {
+      padding: 8px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      font-size: 0.875rem;
+      color: var(--text-2);
+      background: var(--white);
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: border-color var(--t);
+    }
+    .sort-select:focus { border-color: var(--brand); outline: none; }
+
+    /* Templates grid */
+    .tpl-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    @media (max-width: 1200px) { .tpl-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px)  { .tpl-grid { grid-template-columns: 1fr; } }
+
+    /* Template card enhanced */
+    .tpl-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all var(--t-slow);
+      position: relative;
+    }
+    .tpl-card:hover {
+      border-color: var(--gold);
+      box-shadow: 0 20px 40px rgba(245,166,35,0.15);
+      transform: translateY(-6px);
+    }
+    .tpl-thumb {
+      aspect-ratio: 3/4;
+      position: relative;
+      overflow: hidden;
+    }
+    .tpl-preview {
+      width: 100%;
+      height: 100%;
+      padding: 16px;
+      transition: transform 0.5s ease;
+    }
+    .tpl-card:hover .tpl-preview { transform: scale(1.03); }
+
+    /* Overlay with 2 actions */
+    .tpl-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15,35,71,0.75);
+      backdrop-filter: blur(4px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      opacity: 0;
+      transition: opacity var(--t);
+    }
+    .tpl-card:hover .tpl-overlay { opacity: 1; }
+
+    .tpl-footer {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+    }
+    .tpl-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--brand-dark);
+    }
+    .tpl-cat {
+      font-size: 0.75rem;
+      color: var(--text-3);
+      margin-top: 2px;
+      text-transform: capitalize;
+    }
+
+    /* ATS badge on card */
+    .tpl-ats {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(22,163,74,0.9);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--r-full);
+      z-index: 2;
+      backdrop-filter: blur(4px);
+    }
+
+    /* No results */
+    .no-results {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text-3);
+    }
+    .no-results .icon { font-size: 3rem; margin-bottom: 12px; }
+    .no-results h3 { color: var(--brand-dark); margin-bottom: 8px; }
+
+    /* Preview Modal */
+    .preview-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,35,71,0.85);
+      backdrop-filter: blur(12px);
+      z-index: 3000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .preview-modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .preview-modal {
+      background: var(--white);
+      border-radius: var(--r-xl);
+      width: 100%;
+      max-width: 900px;
+      max-height: 90vh;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      box-shadow: var(--shadow-xl);
+      transform: scale(0.95);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .preview-modal-overlay.open .preview-modal { transform: scale(1); }
+    @media (max-width: 768px) {
+      .preview-modal { grid-template-columns: 1fr; }
+    }
+    .preview-left {
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      overflow: auto;
+    }
+    .preview-left-inner {
+      width: 100%;
+      max-width: 360px;
+      aspect-ratio: 3/4;
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .preview-right {
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+    }
+    .preview-right h2 {
+      font-size: 1.375rem;
+      font-weight: 800;
+    }
+    .preview-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .preview-tag {
+      padding: 4px 12px;
+      border-radius: var(--r-full);
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: var(--bg);
+      color: var(--text-3);
+      border: 1px solid var(--border);
+    }
+    .preview-features {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .preview-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.875rem;
+      color: var(--text-2);
+    }
+    .preview-feature .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+    .preview-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--text-3);
+      transition: all var(--t);
+      z-index: 10;
+    }
+    .preview-close:hover { background: var(--error-light); color: var(--error); }
+  </style>
+</head>
+
+<body>
+  <script src="components/nav.js"></script>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="templates-page-hero">
+    <div class="container" style="position:relative;z-index:2">
+      <span class="badge badge-gold" style="margin-bottom:16px;font-size:0.875rem">
+        🎨 50+ Templates
+      </span>
+      <h1>India Ke Best Resume Templates</h1>
+      <p>Har job, har field, har level ke liye. Sab ATS-friendly. Sab editable. Bahut sare free.</p>
+
+      <!-- Search -->
+      <div class="templates-search-wrap">
+        <input type="text" class="templates-search" id="tpl-search"
+               placeholder="🔍  Template dhundho... jaise 'creative' ya 'dark'" />
+        <span class="templates-search-icon">↵</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ MAIN LAYOUT ═══ -->
+  <div class="container">
+
+    <!-- Mobile filter pills -->
+    <div class="templates-mobile-filters" id="mobile-filters">
+      <button class="templates-tab active" data-filter="all">Sab (50+)</button>
+      <button class="templates-tab" data-filter="fresher">Fresher</button>
+      <button class="templates-tab" data-filter="experienced">Experienced</button>
+      <button class="templates-tab" data-filter="creative">Creative</button>
+      <button class="templates-tab" data-filter="govt">Govt</button>
+      <button class="templates-tab" data-filter="tech">Tech/IT</button>
+      <button class="templates-tab" data-filter="healthcare">Healthcare</button>
+      <button class="templates-tab" data-filter="free">Free Only</button>
+    </div>
+
+    <div class="templates-layout">
+
+      <!-- ═══ SIDEBAR ═══ -->
+      <aside class="templates-sidebar">
+
+        <p class="sidebar-title">Category</p>
+        <div class="sidebar-filters" id="sidebar-filters">
+          <button class="sidebar-filter active" data-filter="all">
+            Sab Templates <span class="count">52</span>
+          </button>
+          <button class="sidebar-filter" data-filter="fresher">
+            🎓 Fresher <span class="count">12</span>
+          </button>
+          <button class="sidebar-filter" data-filter="experienced">
+            💼 Experienced <span class="count">10</span>
+          </button>
+          <button class="sidebar-filter" data-filter="creative">
+            🎨 Creative <span class="count">10</span>
+          </button>
+          <button class="sidebar-filter" data-filter="govt">
+            🏛️ Govt Job <span class="count">6</span>
+          </button>
+          <button class="sidebar-filter" data-filter="tech">
+            💻 Tech / IT <span class="count">8</span>
+          </button>
+          <button class="sidebar-filter" data-filter="healthcare">
+            🏥 Healthcare <span class="count">6</span>
+          </button>
+        </div>
+
+        <p class="sidebar-title">Price</p>
+        <div class="sidebar-filters">
+          <button class="sidebar-filter" data-price="all" id="price-all" onclick="setPriceFilter('all')" style="background:var(--brand-xlight);color:var(--brand);font-weight:600">
+            Sab <span class="count" style="background:var(--brand);color:white">52</span>
+          </button>
+          <button class="sidebar-filter" data-price="free" id="price-free" onclick="setPriceFilter('free')">
+            ✓ Free Only <span class="count">22</span>
+          </button>
+          <button class="sidebar-filter" data-price="premium" id="price-premium" onclick="setPriceFilter('premium')">
+            ⭐ Premium <span class="count">30</span>
+          </button>
+        </div>
+
+        <p class="sidebar-title">Style</p>
+        <div class="sidebar-filters">
+          <button class="sidebar-filter" data-style-filter="minimal" onclick="setStyleFilter('minimal')">
+            Minimal
+          </button>
+          <button class="sidebar-filter" data-style-filter="modern" onclick="setStyleFilter('modern')">
+            Modern
+          </button>
+          <button class="sidebar-filter" data-style-filter="dark" onclick="setStyleFilter('dark')">
+            Dark Theme
+          </button>
+          <button class="sidebar-filter" data-style-filter="colorful" onclick="setStyleFilter('colorful')">
+            Colorful
+          </button>
+          <button class="sidebar-filter" data-style-filter="sidebar" onclick="setStyleFilter('sidebar')">
+            Sidebar Layout
+          </button>
+        </div>
+
+        <!-- Premium CTA in sidebar -->
+        <div style="background:linear-gradient(135deg,var(--brand-dark),var(--brand-light));border-radius:var(--r-lg);padding:20px;margin-top:8px;text-align:center">
+          <div style="font-size:1.5rem;margin-bottom:8px">⭐</div>
+          <p style="color:white;font-size:0.875rem;font-weight:700;margin-bottom:4px">Premium Unlock Karo</p>
+          <p style="color:rgba(255,255,255,0.6);font-size:0.75rem;margin-bottom:14px">50+ templates + unlimited downloads</p>
+          <a href="#" class="btn btn-gold btn-sm" style="width:100%;justify-content:center" data-modal-open="auth-modal">
+            Sirf ₹99 Mein
+          </a>
+        </div>
+
+      </aside>
+
+      <!-- ═══ MAIN CONTENT ═══ -->
+      <div>
+        <!-- Top bar -->
+        <div class="templates-topbar">
+          <p class="templates-count">
+            <strong id="visible-count">52</strong> templates mil rahe hain
+          </p>
+          <select class="sort-select" id="sort-select" onchange="sortTemplates(this.value)">
+            <option value="popular">Popular pehle</option>
+            <option value="free">Free pehle</option>
+            <option value="new">Naye pehle</option>
+            <option value="ats">ATS Score High</option>
+          </select>
+        </div>
+
+        <!-- Grid -->
+        <div class="tpl-grid" id="tpl-grid" data-stagger>
+
+          <!-- ══ Template Data ══
+               Each card: data-category, data-price, data-style, data-name, data-ats
+          ═══════════════════════ -->
+
+          <!-- 1. Clean Fresher -->
+          <div class="tpl-card" data-category="fresher" data-price="free" data-style="minimal" data-name="clean fresher" data-ats="96">
+            <div class="tpl-thumb">
+              <div class="tpl-preview" style="background:linear-gradient(135deg,#f8fafc,#e8eef8)">
+                <div style="background:var(--brand);height:55px;border-radius:8px;display:flex;align-items:center;padding:10px 14px;gap:10px;margin-bottom:10px">
+                  <div style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:13px">RS</div>
+                  <div>
+                    <div style="height:9px;width:85px;background:rgba(255,255,255,0.85);border-radius:3px;margin-bottom:5px"></div>
+                    <div style="height:6px;width:60px;background:rgba(255,255,255,0.4);border-radius:3px"></div>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:7px">
+                  <div style="height:7px;background:var(--brand);border-radius:3px;width:38%;opacity:0.7"></div>
+                  <div style="height:5px;background:var(--border);border-radius:3px;width:100%"></div>
+                  <div style="height:5px;background:var(--border);border-radius:3px;width:82%"></div>
+                  <div style="height:7px;background:var(--brand);border-radius:3px;width:38%;opacity:0.7;margin-top:4px"></div>
+                  <div style="height:5px;background:var(--border);border-radius:3px;width:95%"></div>
+                  <div style="height:5px;background:var(--border);border-radius:3px;width:70%"></div>
+                  <div style="height:5px;background:var(--border);border-radius:3px;width:85%"></div>
+                </div>
+              </div>
+              <div class="tpl-overlay">
+                <a href="editor.html?t=clean-fresher" class="btn btn-gold btn-sm">✏️ Use Template</a>
+                <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'clean-fresher')">👁️ Preview</button>
+              </div>
+              <span class="tpl-ats">ATS 96%</span>
+            </div>
+            <div class="tpl-footer">
+              <div><div class="tpl-name">Clean Fresher</div><div class="tpl-cat">fresher · minimal</div></div>
+              <span class="badge badge-success">Free</span>
+            </div>
+            <span style="position:absolute;top:10px;right:10px;z-index:2" class="badge badge-new">🔥 Popular</span>
+          </div>
+
+          <!-- 2. Dark Pro -->
+          <div class="tpl-card" data-category="experienced" data-price="premium" data-style="dark" data-name="dark pro" data-ats="94">
+            <div class="tpl-thumb">
+              <div class="tpl-preview" style="background:linear-gradient(160deg,#0f172a,#1e3a5f)">
+                <div style="margin-bottom:12px">
+                  <div style="height:12px;width:110px;background:var(--gold);border-radius:3px;margin-bottom:6px"></div>
+                  <div style="height:7px;width:75px;background:rgba(245,166,35,0.4);border-radius:3px;margin-bottom:4px"></div>
+                  <div style="display:flex;gap:6px;margin-top:6px">
+                    <span style="background:rgba(245,166,35,0.15);color:var(--gold);font-size:8px;padding:2px 7px;border-radius:4px;border:1px solid rgba(245,166,35,0.3)">5 yrs exp</span>
+                    <span style="background:rgba(245,166,35,0.15);color:var(--gold);font-size:8px;padding:2px 7px;border-radius:4px;border:1px solid rgba(245,166,35,0.3)">Bangalore</span>
+                  </div>
+                </div>
+                <div style="height:1px;background:rgba(255,255,255,0.08);margin-bottom:10px"></div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="height:7px;background:var(--gold);border-radius:3px;width:40%;opacity:0.6"></div>
+                  <div style="height:5px;background:rgba(255,255,255,0.07);border-radius:3px;width:100%"></div>
+                  <div style="height:5px;background:rgba(255,255,255,0.07);border-radius:3px;width:80%"></div>
+                  <div style="height:7px;background:var(--gold);border-radius:3px;width:40%;opacity:0.6;margin-top:4px"></div>
+                  <div style="height:5px;background:rgba(255,255,255,0.07);border-radius:3px;width:92%"></div>
+                  <div style="height:5px;background:rgba(255,255,255,0.07);border-radius:3px;width:68%"></div>
+                </div>
+              </div>
+              <div class="tpl-overlay">
+                <a href="editor.html?t=dark-pro" class="btn btn-gold btn-sm">✏️ Use Template</a>
+                <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'dark-pro')">👁️ Preview</button>
+              </div>
+              <span class="tpl-ats">ATS 94%</span>
+            </div>
+            <div class="tpl-footer">
+              <div><div class="tpl-name">Dark Pro</div><div class="tpl-cat">experienced · dark</div></div>
+              <span class="badge badge-gold">Premium</span>
+            </div>
+          </div>
+
+          <!-- 3. Creative Split -->
+          <div class="tpl-card" data-category="creative" data-price="premium" data-style="sidebar" data-name="creative split" data-ats="88">
+            <div class="tpl-thumb">
+              <div class="tpl-preview" style="background:#fff;display:flex;gap:0;padding:0;border-radius:8px;overflow:hidden">
+                <div style="width:38%;background:linear-gradient(180deg,var(--gold),#c8841a);padding:12px 8px;display:flex;flex-direction:column;gap:6px">
+                  <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.25);margin:0 auto 6px;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:12px">AK</div>
+                  <div style="height:6px;background:rgba(255,255,255,0.7);border-radius:3px;width:90%"></div>
+                  <div style="height:5px;background:rgba(255,255,255,0.4);border-radius:3px;width:70%"></div>
+                  <div style="height:1px;background:rgba(255,255,255,0.2);margin:4px 0"></div>
+                  <div style="height:5px;background:rgba(255,255,255,0.3);border-radius:3px;width:80%"></div>
+                  <div style="height:5px;background:rgba(255,255,255,0.3);border-radius:3px;width:60%"></div>
+                  <div style="height:5px;background:rgba(255,255,255,0.3);border-radius:3px;width:70%"></div>
+                  <div style="height:1px;background:rgba(255,255,255,0.2);margin:4px 0"></div>
+                  <div style="display:flex;flex-direction:column;gap:4px">
+                    <div style="height:8px;width:8px;background:rgba(255,255,255,0.5);border-radius:50%;align-self:center"></div>
+                    <div style="height:5px;background:rgba(255,255,255,0.25);border-radius:3px;width:85%"></div>
+                    <div style="height:5px;background:rgba(255,255,255,0.25);border-radius:3px;width:65%"></div>
+                  </div>
+                </div>
+                <div style="flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:6px">
+                  <div style="height:7px;background:var(--border);border-radius:3px;width:55%"></div>
+                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:100%"></div>
+                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:85%"></div>
+                  <div style="height:7px;background:var(--border);border-radius:3px;width:55%;margin-top:6px"></div>
+                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:92%"></div>
+                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:70%"></div>
+                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:80%"></div>
+                </div>
+              </div>
+              <div class="tpl-overlay">
+                <a href="editor.html?t=creative-split" class="btn btn-gold btn-sm">✏️ Use Template</a>
+                <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'creative-split')">👁️ Preview</button>
+              </div>
+              <span class="tpl-ats">ATS 88%</span>
+            </div>
+            <div class="tpl-footer">
+              <div><div class="tpl-name">Creative Split</div><div class="tpl-cat">creative · sidebar</div></div>
+              <span class="badge badge-gold">Premium</span>
+            </div>
+            <span style="position:absolute;top:10px;right:10px;z-index:2" class="badge badge-new">New ✨</span>
+          </div>
+
+          <!-- 4. Govt Formal -->
+          <div class="tpl-card" data-category="govt" data-price="free" data-style="minimal" data-name="govt formal" data-ats="99">
+            <div class="tpl-thumb">
+              <div class="tpl-preview" style="background:#fff">
+                <div style="border:2px solid var(--brand);border-radius:6px;padding:10px;height:100%;display:flex;flex-direction:column;gap:6px">
+                  <div style="text-align:center;border-bottom:2px solid var(--brand);padding-bottom:8px;margin-bottom:6px">
+                    <div style="height:11px;width:100px;background:var(--brand);border-radius:3px;margin:0 auto 5px"></div>
+                    <div style="height:7px;width:70px;background:var(--border);border-radius:3px;margin:0 auto 4px"></div>
+                    <div style="height:6px;width:90px;background:var(--bg-2);border-radius:3px;margin:0 auto"></div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                    <div style="flex:1;display:flex;flex-direction:column;gap:5px">
+                      <div style="height:6px;background:var(--border);border-radius:3px;width:55%"></div>
+                      <div style="height:5px;background:var(--bg-2);border-radius:3px"></div>
+                      <div style="height:5px;background:var(--bg-2);border-radius:3px;width:88%"></div>
+                    </div>
+                    <div style="width:42px;height:52px;background:var(--bg-2);border-radius:4px;border:1px solid var(--border);margin-left:10px"></div>
+                  </div>
+                  <div style="height:6px;background:var(--border);border-radius:3px;width:55%;margin-top:4px"></div>
+                  <div style="height:5px;background:var(--bg-2);border-radius:3px"></div>
+                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:78%"></div>
+                </div>
+              </div>
+              <div class="tpl-overlay">
+                <a href="editor.html?t=govt-formal" class="btn btn-gold btn-sm">✏️ Use Template</a>
+                <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'govt-formal')">👁️ Preview</button>
+              </div>
+              <span class="tpl-ats" style="background:rgba(22,163,74,0.95)">ATS 99%</span>
+            </div>
+            <div class="tpl-footer">
+              <div><div class="tpl-name">Govt Formal</div><div class="tpl-cat">govt · minimal</div></div>
+              <span class="badge badge-success">Free</span>
+            </div>
+          </div>
+
+          <!-- 5. Tech Dark -->
+          <div class="tpl-card" data-category="tech" data-price="premium" data-style="dark" data-name="tech dark" data-ats="92">
+            <div class="tpl-thumb">
+              <div class="tpl-preview" style="background:#0d1117;border-radius:8px;padding:12px">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+                  <div>
+                    <div style="height:11px;width:100px;background:#58a6ff;border-radius:3px;margin-bottom:5px"></div>
+                    <div style="height:7px;width:70px;background:rgba(88,166,255,0.4);border-radius:3px"></div>
+                  </div>
+                  <div style="width:36px;height:36px;border-radius:50%;background:#21262d;border:2px solid #30363d;display:flex;align-items:center;justify-content:center;color:#58a6ff;font-size:10px;font-weight:800">AT</div>
+                </div>
+                <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap">
+                  <span style="background:#21262d;color:#58a6ff;font-size:7px;padding:2px 6px;border-radius:4px;border:1px solid #30363d">React</span>
+                  <span style="background:#21262d;color:#3fb950;font-size:7px;padding:2px 6px;border-radius:4px;border:1px solid #30363d">Node.js</span>
+                  <span style="background:#21262d;color:#d2a8ff;font-size:7px;padding:2px 6px;border-radius:4px;border:1px solid #30363d">Python</span>
+                  <span style="background:#21262d;color:#ffa657;font-size:7px;padding:2px 6px;border-radius:4px;border:1px solid #30363d">AWS</span>
+                </div>
+                <div style="height:1px;background:#21262d;margin-bottom:8px"></div>
+                <div style="display:flex;flex-direction:column;gap:5px">
+                  <div style="height:6px;background:#21262d;border-radius:3px;width:45%"></div>
+                  <div style="height:5px;background:#161b22;border-radius:3px;width:100%"></div>
+                  <div style="height:5px;background:#161b22;border-radius:3px;width:82%"></div>
+                  <div style="height:6px;background:#21262d;border-radius:3px;width:45%;margin-top:4px"></div>
+                  <div style="height:5px;background:#161b22;border-radius:3px;width:90%"></div>
+                  <div style="height:5px;background:#161b22;border-radius:3px;width:65%"></div>
+                </div>
+              </div>
+              <div class="tpl-overlay">
+                <a href="editor.html?t=tech-dark" class="btn btn-gold btn-sm">✏️ Use Template</a>
+                <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'tech-dark')">👁️ Preview</button>
+              </div>
+              <span class="tpl-ats">ATS 92%</span>
+            </div>
+            <div class="tpl-footer">
+              <div><div class="tpl-name">Tech Dark</div><div class="tpl-cat">tech · dark</div></div>
+              <span class="badge badge-gold">Premium</span>
+            </div>
+            <span style="position:absolute;top:10px;right:10px;z-index:2" class="badge badge-new">🔥 Hot</span>
+          </div>
+
+          <!-- 6. Golden Line -->
+          <div class="tpl-card" data-category="fresher" data-price="free" data-style="modern" data-name="golden line" data-ats="95">
+            <div class="tpl-thumb">
+              <div class="tpl-preview" style="background:#fffdf7">
+                <div style="border-left:4px solid var(--gold);padding-left:12px;margin-bottom:12px">
+                  <div style="height:12px;width:110px;background:var(--brand-dark);border-radius:3px;margin-bottom:5px"></div>
+                  <div style="height:7px;width:70px;background:var(--gold);border-radius:3px;margin-bottom:4px"></div>
+                  <div style="height:6px;width:90px;background:var(--border);border-radius:3px"></div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:7px">
+                  <div style="height:7px;background:var(--gold);border-radius:3px;width:42%;opacity:0.8"></div>
+                  <div style="height:5px;background:var(--border);border-radius:3px;width:100%"></div>
+                  <div style="height:5px;background:var(--border);border-radius:3px;width:78%"></div>
+                  <div style="height:7px;background:var(--gold);border-radius:3px;width:42%;opacity:0.8;margin-top:4px"></div>
+                  <div style="height:5px;background:var(--border);border-radius:3px;width:90%"></div>
+                  <div style="height:5px;background:var(--border);border-radius:3px;width:62%"></div>
+                </div>
+              </div>
+              <div class="tpl-overlay">
+                <a href="editor.html?t=golden-line" class="btn btn-gold btn-sm">✏️ Use Template</a>
+                <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'golden-line')">👁️ Preview</button>
+              </div>
+              <span class="tpl-ats">ATS 95%</span>
+            </div>
+            <div class="tpl-footer">
+              <div><div class="tpl-name">Golden Line</div><div class="tpl-cat">fresher · modern</div></div>
+              <span class="badge badge-success">Free</span>
+            </div>
+          </div>
+
+          <!-- 7. Corporate Blue -->
+          <div class="tpl-card" data-category="experienced" data-price="free" data-style="modern" data-name="corporate blue" data-ats="97">
+            <div class="tpl-thumb">
+              <div class="tpl-preview" style="background:#fff">
+                <div style="background:linear-gradient(90deg,var(--brand-dark),var(--brand-light));height:48px;border-radius:8px 8px 0 0;display:flex;align-items:flex-end;padding:10px 14px;margin:-16px -16px 12px;border-radius:0">
+                  <div>
+                    <div style="height:10px;width:100px;background:rgba(255,255,255,0.9);border-radius:3px;margin-bottom:4px"></div>
+                    <div style="height:6px;width:65px;background:rgba(255,255,255,0.4);border-radius:3px"></div>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="height:7px;background:var(--brand-xlight);border-radius:3px;width:42%;border-left:3px solid var(--brand)"></div>
+                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:100%"></div>
+                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:84%"></div>
+                  <div style="height:7px;background:var(--brand-xlight);border-radius:3px;width:42%;border-left:3px solid var(--brand);margin-top:5px"></div>
+                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:96%"></div>
+                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:72%"></div>
+                </div>
+              </div>
+              <div class="tpl-overlay">
+                <a href="editor.html?t=corporate-blue" class="btn btn-gold btn-sm">✏️ Use Template</a>
+                <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'corporate-blue')">👁️ Preview</button>
+              </div>
+              <span class="tpl-ats">ATS 97%</span>
+            </div>
+            <div class="tpl-footer">
+              <div><div class="tpl-name">Corporate Blue</div><div class="tpl-cat">experienced · modern</div></div>
+              <span class="badge badge-success">Free</span>
+            </div>
+          </div>
+
+          <!-- 8. Midnight Gold -->
+          <div class="tpl-card" data-category="creative" data-price="premium" data-style="dark" data-name="midnight gold" data-ats="89">
+            <div class="tpl-thumb">
+              <div class="tpl-preview" style="background:linear-gradient(160deg,#1a1a2e,#16213e)">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+                  <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;color:#1a1a2e;font-weight:800;font-size:13px;flex-shrink:0">AK</div>
+                  <div>
+                    <div style="height:10px;width:90px;background:var(--gold);border-radius:3px;margin-bottom:5px"></div>
+                    <div style="height:6px;width:65px;background:rgba(245,166,35,0.4);border-radius:3px"></div>
+                  </div>
+                </div>
+                <div style="height:1px;background:rgba(245,166,35,0.2);margin-bottom:10px"></div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="height:7px;background:rgba(245,166,35,0.5);border-radius:3px;width:42%"></div>
+                  <div style="height:5px;background:rgba(255,255,255,0.07);border-radius:3px;width:100%"></div>
+                  <div style="height:5px;background:rgba(255,255,255,0.07);border-radius:3px;width:78%"></div>
+                  <div style="height:7px;background:rgba(245,166,35,0.5);border-radius:3px;width:42%;margin-top:4px"></div>
+                  <div style="height:5px;background:rgba(255,255,255,0.07);border-radius:3px;width:88%"></div>
+                  <div style="height:5px;background:rgba(255,255,255,0.07);border-radius:3px;width:60%"></div>
+                </div>
+              </div>
+              <div class="tpl-overlay">
+                <a href="editor.html?t=midnight-gold" class="btn btn-gold btn-sm">✏️ Use Template</a>
+                <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'midnight-gold')">👁️ Preview</button>
+              </div>
+              <span class="tpl-ats">ATS 89%</span>
+            </div>
+            <div class="tpl-footer">
+              <div><div class="tpl-name">Midnight Gold</div><div class="tpl-cat">creative · dark</div></div>
+              <span class="badge badge-gold">Premium</span>
+            </div>
+            <span style="position:absolute;top:10px;right:10px;z-index:2" class="badge badge-new">New ✨</span>
+          </div>
+
+          <!-- 9. Medical White -->
+          <div class="tpl-card" data-category="healthcare" data-price="free" data-style="minimal" data-name="medical white" data-ats="98">
+            <div class="tpl-thumb">
+              <div class="tpl-preview" style="background:#fff">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:10px;border-bottom:2px solid #e0f2fe">
+                  <div style="width:40px;height:40px;border-radius:8px;background:#0ea5e9;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:13px">+</div>
+                  <div>
+                    <div style="height:10px;width:90px;background:#0c4a6e;border-radius:3px;margin-bottom:5px"></div>
+                    <div style="height:6px;width:60px;background:#7dd3fc;border-radius:3px"></div>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="height:7px;background:#bae6fd;border-radius:3px;width:45%"></div>
+                  <div style="height:5px;background:#f0f9ff;border-radius:3px;width:100%;border:1px solid #e0f2fe"></div>
+                  <div style="height:5px;background:#f0f9ff;border-radius:3px;width:80%;border:1px solid #e0f2fe"></div>
+                  <div style="height:7px;background:#bae6fd;border-radius:3px;width:45%;margin-top:4px"></div>
+                  <div style="height:5px;background:#f0f9ff;border-radius:3px;width:92%;border:1px solid #e0f2fe"></div>
+                  <div style="height:5px;background:#f0f9ff;border-radius:3px;width:68%;border:1px solid #e0f2fe"></div>
+                </div>
+              </div>
+              <div class="tpl-overlay">
+                <a href="editor.html?t=medical-white" class="btn btn-gold btn-sm">✏️ Use Template</a>
+                <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'medical-white')">👁️ Preview</button>
+              </div>
+              <span class="tpl-ats" style="background:rgba(14,165,233,0.9)">ATS 98%</span>
+            </div>
+            <div class="tpl-footer">
+              <div><div class="tpl-name">Medical White</div><div class="tpl-cat">healthcare · minimal</div></div>
+              <span class="badge badge-success">Free</span>
+            </div>
+          </div>
+
+          <!-- 10. Bold Modern -->
+          <div class="tpl-card" data-category="fresher" data-price="premium" data-style="colorful" data-name="bold modern" data-ats="91">
+            <div class="tpl-thumb">
+              <div class="tpl-preview" style="background:#fff">
+                <div style="background:linear-gradient(135deg,#7c3aed,#4f46e5);padding:14px;margin:-16px -16px 12px;display:flex;align-items:center;gap:10px">
+                  <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:12px">SK</div>
+                  <div>
+                    <div style="height:9px;width:85px;background:rgba(255,255,255,0.85);border-radius:3px;margin-bottom:4px"></div>
+                    <div style="height:6px;width:60px;background:rgba(255,255,255,0.4);border-radius:3px"></div>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="height:7px;background:#ede9fe;border-radius:3px;width:42%;border-left:3px solid #7c3aed"></div>
+                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:100%"></div>
+                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:76%"></div>
+                  <div style="display:flex;gap:4px;margin-top:4px">
+                    <span style="background:#ede9fe;color:#7c3aed;font-size:7px;padding:2px 6px;border-radius:4px">Design</span>
+                    <span style="background:#ede9fe;color:#7c3aed;font-size:7px;padding:2px 6px;border-radius:4px">Figma</span>
+                    <span style="background:#ede9fe;color:#7c3aed;font-size:7px;padding:2px 6px;border-radius:4px">UI/UX</span>
+                  </div>
+                </div>
+              </div>
+              <div class="tpl-overlay">
+                <a href="editor.html?t=bold-modern" class="btn btn-gold btn-sm">✏️ Use Template</a>
+                <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'bold-modern')">👁️ Preview</button>
+              </div>
+              <span class="tpl-ats">ATS 91%</span>
+            </div>
+            <div class="tpl-footer">
+              <div><div class="tpl-name">Bold Modern</div><div class="tpl-cat">fresher · colorful</div></div>
+              <span class="badge badge-gold">Premium</span>
+            </div>
+          </div>
+
+          <!-- 11. Minimal Classic -->
+          <div class="tpl-card" data-category="experienced" data-price="free" data-style="minimal" data-name="minimal classic" data-ats="99">
+            <div class="tpl-thumb">
+              <div class="tpl-preview" style="background:#fff">
+                <div style="text-align:center;padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--border)">
+                  <div style="height:12px;width:120px;background:var(--brand-dark);border-radius:3px;margin:0 auto 6px"></div>
+                  <div style="height:7px;width:80px;background:var(--border);border-radius:3px;margin:0 auto 4px"></div>
+                  <div style="height:6px;width:100px;background:var(--bg-2);border-radius:3px;margin:0 auto"></div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="height:7px;background:var(--brand-dark);border-radius:1px;width:100%;opacity:0.15"></div>
+                  <div style="height:7px;background:var(--border);border-radius:3px;width:38%"></div>
+                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:100%"></div>
+                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:82%"></div>
+                  <div style="height:7px;background:var(--brand-dark);border-radius:1px;width:100%;opacity:0.15;margin-top:4px"></div>
+                  <div style="height:7px;background:var(--border);border-radius:3px;width:38%"></div>
+                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:90%"></div>
+                </div>
+              </div>
+              <div class="tpl-overlay">
+                <a href="editor.html?t=minimal-classic" class="btn btn-gold btn-sm">✏️ Use Template</a>
+                <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'minimal-classic')">👁️ Preview</button>
+              </div>
+              <span class="tpl-ats" style="background:rgba(22,163,74,0.95)">ATS 99%</span>
+            </div>
+            <div class="tpl-footer">
+              <div><div class="tpl-name">Minimal Classic</div><div class="tpl-cat">experienced · minimal</div></div>
+              <span class="badge badge-success">Free</span>
+            </div>
+            <span style="position:absolute;top:10px;right:10px;z-index:2" class="badge badge-new">🔥 Popular</span>
+          </div>
+
+          <!-- 12. Saffron Bold -->
+          <div class="tpl-card" data-category="creative" data-price="premium" data-style="colorful" data-name="saffron bold" data-ats="87">
+            <div class="tpl-thumb">
+              <div class="tpl-preview" style="background:#fff8f0">
+                <div style="background:linear-gradient(135deg,#ea580c,#f97316);padding:14px;margin:-16px -16px 12px;display:flex;justify-content:space-between;align-items:center">
+                  <div>
+                    <div style="height:10px;width:90px;background:rgba(255,255,255,0.9);border-radius:3px;margin-bottom:4px"></div>
+                    <div style="height:6px;width:60px;background:rgba(255,255,255,0.4);border-radius:3px"></div>
+                  </div>
+                  <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:12px">RK</div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="height:7px;background:#fed7aa;border-radius:3px;width:44%"></div>
+                  <div style="height:5px;background:#fff7ed;border-radius:3px;width:100%;border:1px solid #fed7aa"></div>
+                  <div style="height:5px;background:#fff7ed;border-radius:3px;width:74%;border:1px solid #fed7aa"></div>
+                  <div style="height:7px;background:#fed7aa;border-radius:3px;width:44%;margin-top:4px"></div>
+                  <div style="height:5px;background:#fff7ed;border-radius:3px;width:88%;border:1px solid #fed7aa"></div>
+                  <div style="height:5px;background:#fff7ed;border-radius:3px;width:65%;border:1px solid #fed7aa"></div>
+                </div>
+              </div>
+              <div class="tpl-overlay">
+                <a href="editor.html?t=saffron-bold" class="btn btn-gold btn-sm">✏️ Use Template</a>
+                <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'saffron-bold')">👁️ Preview</button>
+              </div>
+              <span class="tpl-ats">ATS 87%</span>
+            </div>
+            <div class="tpl-footer">
+              <div><div class="tpl-name">Saffron Bold</div><div class="tpl-cat">creative · colorful</div></div>
+              <span class="badge badge-gold">Premium</span>
+            </div>
+          </div>
+
+          <!-- No results placeholder (hidden by default) -->
+          <div class="no-results" id="no-results" style="display:none">
+            <div class="icon">🔍</div>
+            <h3>Koi template nahi mila</h3>
+            <p>Dusra search karo ya filter hatao</p>
+            <button class="btn btn-outline" onclick="resetFilters()" style="margin-top:16px">Sab Templates Dekho</button>
+          </div>
+
+        </div>
+        <!-- end .tpl-grid -->
+
+        <!-- Load more -->
+        <div style="text-align:center;margin-top:40px" id="load-more-wrap">
+          <button class="btn btn-ghost btn-lg" id="load-more-btn" onclick="loadMore()">
+            Aur Templates Load Karo (38 aur hain)
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+          </button>
+        </div>
+
+      </div>
+      <!-- end main content -->
+
+    </div>
+    <!-- end .templates-layout -->
+
+  </div>
+  <!-- end .container -->
+
+  <!-- ═══ PREVIEW MODAL ═══ -->
+  <div class="preview-modal-overlay" id="preview-modal" style="position:fixed">
+    <button class="preview-close" onclick="closePreview()">✕</button>
+    <div class="preview-modal">
+      <div class="preview-left">
+        <div class="preview-left-inner" id="preview-thumb-wrap">
+          <!-- Dynamic content -->
+        </div>
+      </div>
+      <div class="preview-right">
+        <div>
+          <h2 id="preview-title">Template Name</h2>
+          <div class="preview-tags" id="preview-tags"></div>
+        </div>
+        <div class="preview-features" id="preview-features"></div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:10px">
+          <a id="preview-use-btn" href="#" class="btn btn-gold btn-lg btn-shine" style="justify-content:center">
+            ✏️ Is Template Ko Use Karo
+          </a>
+          <p style="font-size:0.8rem;color:var(--text-3);text-align:center" id="preview-price-note"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ AUTH MODAL ═══ -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal">
+      <button class="modal-close" data-modal-close>✕</button>
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="width:48px;height:48px;background:linear-gradient(135deg,var(--brand),var(--brand-light));border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;color:white;font-family:var(--font-heading);font-weight:800;font-size:1.25rem;margin:0 auto 12px">R</div>
+        <h2 style="font-size:1.5rem;margin-bottom:4px">Premium Unlock Karo</h2>
+        <p style="color:var(--text-3);font-size:0.9rem">Sirf ₹99 mein sab templates + unlimited downloads</p>
+      </div>
+      <a href="pricing.html" class="btn btn-gold btn-lg btn-shine" style="width:100%;justify-content:center">
+        ₹99 Mein Upgrade Karo 🚀
+      </a>
+      <div class="modal-divider"><span class="modal-divider-line"></span><span class="modal-divider-text">ya free mein shuru karo</span><span class="modal-divider-line"></span></div>
+      <a href="editor.html" class="btn btn-ghost btn-lg" style="width:100%;justify-content:center">
+        Free Templates Use Karo
+      </a>
+    </div>
+  </div>
+
+  <script src="components/footer.js"></script>
+  <script src="assets/js/main.js"></script>
+
+  <script>
+    /* ══ Templates Page Logic ══ */
+    let activeCategory  = 'all';
+    let activePrice     = 'all';
+    let activeStyle     = 'all';
+    let searchQuery     = '';
+
+    const grid          = document.getElementById('tpl-grid');
+    const allCards      = Array.from(grid.querySelectorAll('.tpl-card'));
+    const countEl       = document.getElementById('visible-count');
+    const noResults     = document.getElementById('no-results');
+
+    function applyFilters() {
+      let visible = 0;
+      allCards.forEach(card => {
+        const cat   = card.dataset.category;
+        const price = card.dataset.price;
+        const style = card.dataset.style;
+        const name  = card.dataset.name || '';
+
+        const matchCat   = activeCategory === 'all' || cat === activeCategory;
+        const matchPrice = activePrice    === 'all' || price === activePrice;
+        const matchStyle = activeStyle    === 'all' || style === activeStyle;
+        const matchSearch = !searchQuery || name.includes(searchQuery.toLowerCase());
+
+        if (matchCat && matchPrice && matchStyle && matchSearch) {
+          card.style.display = '';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+          visible++;
+        } else {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(12px)';
+          setTimeout(() => { if (card.style.opacity === '0') card.style.display = 'none'; }, 200);
+        }
+      });
+
+      countEl.textContent = visible;
+      noResults.style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    // Category filter — sidebar
+    document.querySelectorAll('.sidebar-filter[data-filter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.sidebar-filter[data-filter]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCategory = btn.dataset.filter;
+        applyFilters();
+      });
+    });
+
+    // Mobile tabs
+    document.querySelectorAll('.templates-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.templates-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        activeCategory = tab.dataset.filter;
+        if (activeCategory === 'free') { activePrice = 'free'; activeCategory = 'all'; }
+        else activePrice = 'all';
+        applyFilters();
+      });
+    });
+
+    function setPriceFilter(val) {
+      activePrice = val;
+      ['all','free','premium'].forEach(v => {
+        const el = document.getElementById('price-' + v);
+        if (el) {
+          el.style.background = v === val ? 'var(--brand-xlight)' : '';
+          el.style.color      = v === val ? 'var(--brand)' : '';
+          el.style.fontWeight = v === val ? '600' : '';
+        }
+      });
+      applyFilters();
+    }
+
+    function setStyleFilter(val) {
+      activeStyle = activeStyle === val ? 'all' : val;
+      document.querySelectorAll('[data-style-filter]').forEach(btn => {
+        btn.style.background = btn.dataset.styleFilter === activeStyle ? 'var(--brand-xlight)' : '';
+        btn.style.color      = btn.dataset.styleFilter === activeStyle ? 'var(--brand)' : '';
+      });
+      applyFilters();
+    }
+
+    function sortTemplates(val) {
+      const parent = grid;
+      const cards  = Array.from(grid.querySelectorAll('.tpl-card'));
+
+      cards.sort((a, b) => {
+        if (val === 'free')    return (a.dataset.price === 'free' ? -1 : 1);
+        if (val === 'ats')     return parseInt(b.dataset.ats) - parseInt(a.dataset.ats);
+        if (val === 'new')     return Math.random() - 0.5;
+        return 0;
+      });
+
+      cards.forEach(c => parent.appendChild(c));
+    }
+
+    function resetFilters() {
+      activeCategory = 'all';
+      activePrice    = 'all';
+      activeStyle    = 'all';
+      searchQuery    = '';
+      document.getElementById('tpl-search').value = '';
+      document.querySelectorAll('.sidebar-filter[data-filter]').forEach((b,i) => b.classList.toggle('active', i===0));
+      applyFilters();
+    }
+
+    // Search
+    const searchEl = document.getElementById('tpl-search');
+    let searchTimer;
+    searchEl.addEventListener('input', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        searchQuery = searchEl.value.trim();
+        applyFilters();
+      }, 250);
+    });
+
+    // Preview Modal
+    const previewData = {
+      'clean-fresher':  { title:'Clean Fresher', price:'free',    cat:'Fresher', style:'Minimal', ats:'96%', features:['ATS Score 96% — almost all companies pass karega','Clean two-section layout','Blue header with name & contact','Education & Experience sections','Skills section with clean tags','Photo upload supported'] },
+      'dark-pro':       { title:'Dark Pro',       price:'premium', cat:'Experienced', style:'Dark', ats:'94%', features:['ATS Score 94%','Dark navy + gold color scheme','5+ year experience ke liye perfect','Minimal sidebar with contact info','Work history timeline','Skills aur achievements section'] },
+      'creative-split': { title:'Creative Split', price:'premium', cat:'Creative', style:'Sidebar', ats:'88%', features:['Gold sidebar with photo upload','Canva-like two column layout','Skills aur hobbies visual display','Color customizable — one click','Creative fields ke liye best','Designers, photographers ke liye'] },
+      'govt-formal':    { title:'Govt Formal',    price:'free',    cat:'Govt', style:'Minimal', ats:'99%', features:['ATS Score 99% — Highest rated','Sarkari naukri format exactly','Passport photo box included','Formal black & white design','Declaration section included','All standard govt fields hain'] },
+      'tech-dark':      { title:'Tech Dark',      price:'premium', cat:'Tech/IT', style:'Dark', ats:'92%', features:['GitHub-inspired dark theme','Tech skills tags with colors','GitHub/Portfolio link section','Projects section prominent','Languages & frameworks section','IT jobs ke liye best'] },
+      'golden-line':    { title:'Golden Line',    price:'free',    cat:'Fresher', style:'Modern', ats:'95%', features:['ATS Score 95%','Gold accent left border design','Warm white background','Education-first layout for freshers','Internship section included','Clean typography'] },
+      'corporate-blue': { title:'Corporate Blue', price:'free',    cat:'Experienced', style:'Modern', ats:'97%', features:['ATS Score 97% — Very high','Blue banner header','Corporate clean look','Work experience timeline style','Achievements bullets','Multiple roles ke liye'] },
+      'midnight-gold':  { title:'Midnight Gold',  price:'premium', cat:'Creative', style:'Dark', ats:'89%', features:['Dark midnight + gold accents','Circular avatar support','Elegant typography','Creative professionals ke liye','Portfolio link support','Unique aur memorable look'] },
+      'medical-white':  { title:'Medical White',  price:'free',    cat:'Healthcare', style:'Minimal', ats:'98%', features:['ATS Score 98%','Medical cross icon in header','Clean white clinical design','Certifications section','Publications section','Hospital/Clinic jobs ke liye'] },
+      'bold-modern':    { title:'Bold Modern',    price:'premium', cat:'Fresher', style:'Colorful', ats:'91%', features:['Purple gradient header','Skills tags with color coding','Modern Gen-Z design','Portfolio/GitHub links','Colorful section dividers','Design & creative fresher ke liye'] },
+      'minimal-classic':{ title:'Minimal Classic',price:'free',    cat:'Experienced', style:'Minimal', ats:'99%', features:['ATS Score 99% — Maximum','Industry standard format','Center-aligned professional header','Full-width horizontal dividers','Word-compatible layout','Any job ke liye safest choice'] },
+      'saffron-bold':   { title:'Saffron Bold',   price:'premium', cat:'Creative', style:'Colorful', ats:'87%', features:['Saffron orange gradient header','Desi-inspired warm colors','Right-aligned photo placement','Marketing & sales ke liye','Bold section titles','High visibility design'] },
+    };
+
+    function openPreview(e, id) {
+      e.preventDefault();
+      e.stopPropagation();
+      const data  = previewData[id];
+      if (!data) return;
+
+      const card  = document.querySelector(`[data-name="${data.title.toLowerCase()}"]`);
+      const thumb = card ? card.querySelector('.tpl-thumb').cloneNode(true) : null;
+
+      document.getElementById('preview-title').textContent = data.title;
+      document.getElementById('preview-use-btn').href = `editor.html?t=${id}`;
+
+      const tagsEl = document.getElementById('preview-tags');
+      tagsEl.innerHTML = `
+        <span class="preview-tag">${data.cat}</span>
+        <span class="preview-tag">${data.style}</span>
+        <span class="preview-tag" style="background:var(--success-light);color:var(--success);border-color:var(--success)">ATS ${data.ats}</span>
+        <span class="preview-tag ${data.price === 'free' ? '' : ''}" style="${data.price === 'free' ? 'background:var(--success-light);color:var(--success)' : 'background:var(--gold-xlight);color:var(--gold-dark)'}">${data.price === 'free' ? '✓ Free' : '⭐ Premium'}</span>
+      `;
+
+      document.getElementById('preview-features').innerHTML = data.features.map(f => `
+        <div class="preview-feature"><span class="dot"></span><span>${f}</span></div>
+      `).join('');
+
+      document.getElementById('preview-price-note').textContent = data.price === 'free'
+        ? '✓ Yeh template bilkul free hai'
+        : '⭐ Premium plan mein available — ₹99 ek baar';
+
+      // Show thumb
+      const wrap = document.getElementById('preview-thumb-wrap');
+      wrap.style.cssText = 'width:100%;height:100%';
+      if (thumb) {
+        const overlay = thumb.querySelector('.tpl-overlay');
+        if (overlay) overlay.remove();
+        const ats = thumb.querySelector('.tpl-ats');
+        if (ats) ats.remove();
+        wrap.innerHTML = '';
+        const inner = thumb.querySelector('.tpl-preview');
+        if (inner) {
+          inner.style.height = '100%';
+          inner.style.padding = '24px';
+          wrap.appendChild(inner);
+        }
+      }
+
+      document.getElementById('preview-modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePreview() {
+      document.getElementById('preview-modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('preview-modal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('preview-modal')) closePreview();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closePreview();
+    });
+
+    function loadMore() {
+      window.RW?.Toast?.info('Aur templates aa rahe hain... 🎨');
+      document.getElementById('load-more-wrap').style.opacity = '0.5';
+    }
+  </script>
+  <script src="assets/js/mobile.js"></script>
+</body>
+</html>
