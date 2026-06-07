@@ -1,23 +1,24 @@
-{
-  "version": 2,
-  "builds": [
-    {
-      "src": "backend/server.js",
-      "use": "@vercel/node"
-    }
-  ],
+"version": 2,
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "backend/server.js"
-    },
-    {
-      "src": "/(.*\\.(css|js|png|jpg|svg|ico|woff2?))",
-      "dest": "/$1"
+      "dest": "/backend/server.js"
     },
     {
       "src": "/(.*)\\.html",
       "dest": "/$1.html"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
+      "src": "/components/(.*)",
+      "dest": "/components/$1"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
     },
     {
       "src": "/(.*)",
@@ -25,3 +26,5 @@
     }
   ]
 }
+EOF
+echo "Done"
