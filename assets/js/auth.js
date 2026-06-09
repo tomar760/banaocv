@@ -1,6 +1,7 @@
 /* ============================================================
    BanaoCV — assets/js/auth.js
-   Complete Authentication System
+   Complete LOCAL Authentication — No API needed
+   Works 100% without Supabase in demo mode
    - Email/Password login & signup
    - Google OAuth
    - OTP verification
@@ -453,49 +454,48 @@ const Auth = {
      DEMO MODE (no backend)
   ──────────────────────────────────────── */
   async demoLogin(email, password) {
-    await new Promise(r => setTimeout(r, 1000)); // Simulate API delay
+    await new Promise(r => setTimeout(r, 600));
 
-    // Check if user exists in localStorage
     const stored = JSON.parse(localStorage.getItem('rw_users') || '{}');
+    const key    = email.toLowerCase();
 
-    if (stored[email]) {
-      if (stored[email].password !== btoa(password)) {
-        throw new Error('Wrong password');
-      }
-      const user = { ...stored[email] };
-      delete user.password;
-      Session.save(user, 'demo-token-' + Date.now());
-      Auth.onLoginSuccess(user);
-    } else {
-      throw new Error('No account found. Signup karo pehle.');
+    if (!stored[key]) {
+      throw new Error('No account found. Pehle signup karo.');
     }
+    if (stored[key].password !== btoa(password)) {
+      throw new Error('Email ya password galat hai');
+    }
+
+    const user = { ...stored[key] };
+    delete user.password;
+    Session.save(user, 'local-token-' + Date.now());
+    Auth.onLoginSuccess(user);
   },
 
   async demoSignup(name, email, password) {
-    await new Promise(r => setTimeout(r, 1000));
+    await new Promise(r => setTimeout(r, 600));
 
-    // Check if already exists
     const stored = JSON.parse(localStorage.getItem('rw_users') || '{}');
-    if (stored[email]) {
+    const key    = email.toLowerCase();
+
+    if (stored[key]) {
       throw new Error('Yeh email already registered hai. Login karo.');
     }
 
-    // Save to localStorage (demo only)
     const user = {
-      id      : 'u-' + Date.now(),
-      email,
+      id      : 'u_' + Date.now(),
+      email   : key,
       name,
       plan    : 'free',
       created : new Date().toISOString(),
       password: btoa(password),
     };
 
-    stored[email] = user;
+    stored[key] = user;
     localStorage.setItem('rw_users', JSON.stringify(stored));
 
-    const userClean = { ...user };
-    delete userClean.password;
-    Session.save(userClean, 'demo-token-' + Date.now());
+    const userClean = { id: user.id, email: user.email, name: user.name, plan: user.plan };
+    Session.save(userClean, 'local-token-' + Date.now());
     Auth.onSignupSuccess(userClean);
   },
 
