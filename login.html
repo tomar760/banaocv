@@ -593,7 +593,7 @@
             <span class="auth-divider-line"></span>
           </div>
 
-          <form onsubmit="Auth.emailLogin(event)" style="display:flex;flex-direction:column;gap:14px">
+          <form onsubmit="event.preventDefault(); Auth.emailLogin(event);" style="display:flex;flex-direction:column;gap:14px">
             <div class="form-group">
               <label class="form-label">Email</label>
               <div class="input-wrap">
@@ -656,7 +656,7 @@
             <span class="auth-divider-line"></span>
           </div>
 
-          <form onsubmit="Auth.emailSignup(event)" style="display:flex;flex-direction:column;gap:14px">
+          <form onsubmit="event.preventDefault(); Auth.emailSignup(event);" style="display:flex;flex-direction:column;gap:14px">
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label">Pehla Naam</label>
@@ -723,7 +723,7 @@
           <h1 class="auth-title">Password Reset 🔑</h1>
           <p class="auth-sub">Email daalo — reset link bhejenge</p>
 
-          <form onsubmit="Auth.forgotPassword(event)" style="display:flex;flex-direction:column;gap:14px">
+          <form onsubmit="event.preventDefault(); Auth.forgotPassword(event);" style="display:flex;flex-direction:column;gap:14px">
             <div class="form-group">
               <label class="form-label">Email Address</label>
               <div class="input-wrap">
@@ -907,15 +907,22 @@
 
   /* ── Check if already logged in ── */
   document.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('mode') === 'signup') switchView('signup');
-
+    // Already logged in → dashboard
     try {
       const user = JSON.parse(localStorage.getItem('rw_user') || 'null');
       if (user?.id) {
         window.location.href = 'dashboard.html';
+        return;
       }
     } catch(e) {}
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('mode') === 'signup') switchView('signup');
+
+    // Start resend timer if on OTP view
+    if (typeof startResendTimer === 'function') {
+      document.getElementById('view-otp')?.addEventListener('shown', () => startResendTimer(30));
+    }
   });
   </script>
 </body>
