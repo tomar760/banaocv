@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/animations.css" />
   <link rel="stylesheet" href="assets/css/mobile.css" />
+  <link rel="stylesheet" href="assets/css/templates.css" />
   <style>
     /* ── Templates page specific ── */
     .templates-page-hero {
@@ -539,24 +540,36 @@
           <!-- 1. Clean Fresher -->
           <div class="tpl-card" data-category="fresher" data-price="free" data-style="minimal" data-name="clean fresher" data-ats="96">
             <div class="tpl-thumb">
-              <div class="tpl-preview" style="background:linear-gradient(135deg,#f8fafc,#e8eef8)">
-                <div style="background:var(--brand);height:55px;border-radius:8px;display:flex;align-items:center;padding:10px 14px;gap:10px;margin-bottom:10px">
-                  <div style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:13px">RS</div>
-                  <div>
-                    <div style="height:9px;width:85px;background:rgba(255,255,255,0.85);border-radius:3px;margin-bottom:5px"></div>
-                    <div style="height:6px;width:60px;background:rgba(255,255,255,0.4);border-radius:3px"></div>
-                  </div>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:7px">
-                  <div style="height:7px;background:var(--brand);border-radius:3px;width:38%;opacity:0.7"></div>
-                  <div style="height:5px;background:var(--border);border-radius:3px;width:100%"></div>
-                  <div style="height:5px;background:var(--border);border-radius:3px;width:82%"></div>
-                  <div style="height:7px;background:var(--brand);border-radius:3px;width:38%;opacity:0.7;margin-top:4px"></div>
-                  <div style="height:5px;background:var(--border);border-radius:3px;width:95%"></div>
-                  <div style="height:5px;background:var(--border);border-radius:3px;width:70%"></div>
-                  <div style="height:5px;background:var(--border);border-radius:3px;width:85%"></div>
+              <div class="tpl-preview tpl-clean-fresher">
+              <div class="tpl-head">
+                <div class="tpl-avatar">RS</div>
+                <div class="tpl-head-info">
+                  <div class="tpl-name-line"></div>
+                  <div class="tpl-role-line"></div>
                 </div>
               </div>
+              <div class="tpl-contact">
+                <div class="tpl-contact-dot" style="width:35px"></div>
+                <div class="tpl-contact-dot" style="width:40px"></div>
+                <div class="tpl-contact-dot" style="width:30px"></div>
+              </div>
+              <div class="tpl-body">
+                <div class="tpl-section-title"></div>
+                <div class="tpl-line tpl-line-full"></div>
+                <div class="tpl-line tpl-line-med"></div>
+                <div class="tpl-section-title"></div>
+                <div class="tpl-line tpl-line-full"></div>
+                <div class="tpl-line tpl-line-short"></div>
+                <div class="tpl-line tpl-line-med"></div>
+                <div class="tpl-section-title"></div>
+                <div class="tpl-skills">
+                  <span class="tpl-skill">React</span>
+                  <span class="tpl-skill">Node.js</span>
+                  <span class="tpl-skill">Python</span>
+                  <span class="tpl-skill">Git</span>
+                </div>
+              </div>
+            </div>
               <div class="tpl-overlay">
                 <a href="editor.html?t=clean-fresher" class="btn btn-gold btn-sm">✏️ Use Template</a>
                 <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'clean-fresher')">👁️ Preview</button>
@@ -573,25 +586,26 @@
           <!-- 2. Dark Pro -->
           <div class="tpl-card" data-category="experienced" data-price="premium" data-style="dark" data-name="dark pro" data-ats="94">
             <div class="tpl-thumb">
-              <div class="tpl-preview" style="background:linear-gradient(160deg,#0f172a,#1e3a5f)">
-                <div style="margin-bottom:12px">
-                  <div style="height:12px;width:110px;background:var(--gold);border-radius:3px;margin-bottom:6px"></div>
-                  <div style="height:7px;width:75px;background:rgba(245,166,35,0.4);border-radius:3px;margin-bottom:4px"></div>
-                  <div style="display:flex;gap:6px;margin-top:6px">
-                    <span style="background:rgba(245,166,35,0.15);color:var(--gold);font-size:8px;padding:2px 7px;border-radius:4px;border:1px solid rgba(245,166,35,0.3)">5 yrs exp</span>
-                    <span style="background:rgba(245,166,35,0.15);color:var(--gold);font-size:8px;padding:2px 7px;border-radius:4px;border:1px solid rgba(245,166,35,0.3)">Bangalore</span>
-                  </div>
-                </div>
-                <div style="height:1px;background:rgba(255,255,255,0.08);margin-bottom:10px"></div>
-                <div style="display:flex;flex-direction:column;gap:6px">
-                  <div style="height:7px;background:var(--gold);border-radius:3px;width:40%;opacity:0.6"></div>
-                  <div style="height:5px;background:rgba(255,255,255,0.07);border-radius:3px;width:100%"></div>
-                  <div style="height:5px;background:rgba(255,255,255,0.07);border-radius:3px;width:80%"></div>
-                  <div style="height:7px;background:var(--gold);border-radius:3px;width:40%;opacity:0.6;margin-top:4px"></div>
-                  <div style="height:5px;background:rgba(255,255,255,0.07);border-radius:3px;width:92%"></div>
-                  <div style="height:5px;background:rgba(255,255,255,0.07);border-radius:3px;width:68%"></div>
-                </div>
+              <div class="tpl-preview tpl-dark-pro">
+              <div class="tpl-name-big"></div>
+              <div class="tpl-role-sm"></div>
+              <div class="tpl-tags">
+                <span class="tpl-tag">5 yrs exp</span>
+                <span class="tpl-tag">Bangalore</span>
+                <span class="tpl-tag">Full Stack</span>
               </div>
+              <div class="tpl-divider"></div>
+              <div class="tpl-sec"></div>
+              <div class="tpl-line tpl-line-f"></div>
+              <div class="tpl-line tpl-line-m"></div>
+              <div class="tpl-line tpl-line-s"></div>
+              <div class="tpl-sec"></div>
+              <div class="tpl-line tpl-line-f"></div>
+              <div class="tpl-line tpl-line-m"></div>
+              <div class="tpl-sec"></div>
+              <div class="tpl-line tpl-line-m"></div>
+              <div class="tpl-line tpl-line-s"></div>
+            </div>
               <div class="tpl-overlay">
                 <a href="editor.html?t=dark-pro" class="btn btn-gold btn-sm">✏️ Use Template</a>
                 <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'dark-pro')">👁️ Preview</button>
@@ -607,32 +621,32 @@
           <!-- 3. Creative Split -->
           <div class="tpl-card" data-category="creative" data-price="premium" data-style="sidebar" data-name="creative split" data-ats="88">
             <div class="tpl-thumb">
-              <div class="tpl-preview" style="background:#fff;display:flex;gap:0;padding:0;border-radius:8px;overflow:hidden">
-                <div style="width:38%;background:linear-gradient(180deg,var(--gold),#c8841a);padding:12px 8px;display:flex;flex-direction:column;gap:6px">
-                  <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.25);margin:0 auto 6px;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:12px">AK</div>
-                  <div style="height:6px;background:rgba(255,255,255,0.7);border-radius:3px;width:90%"></div>
-                  <div style="height:5px;background:rgba(255,255,255,0.4);border-radius:3px;width:70%"></div>
-                  <div style="height:1px;background:rgba(255,255,255,0.2);margin:4px 0"></div>
-                  <div style="height:5px;background:rgba(255,255,255,0.3);border-radius:3px;width:80%"></div>
-                  <div style="height:5px;background:rgba(255,255,255,0.3);border-radius:3px;width:60%"></div>
-                  <div style="height:5px;background:rgba(255,255,255,0.3);border-radius:3px;width:70%"></div>
-                  <div style="height:1px;background:rgba(255,255,255,0.2);margin:4px 0"></div>
-                  <div style="display:flex;flex-direction:column;gap:4px">
-                    <div style="height:8px;width:8px;background:rgba(255,255,255,0.5);border-radius:50%;align-self:center"></div>
-                    <div style="height:5px;background:rgba(255,255,255,0.25);border-radius:3px;width:85%"></div>
-                    <div style="height:5px;background:rgba(255,255,255,0.25);border-radius:3px;width:65%"></div>
-                  </div>
-                </div>
-                <div style="flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:6px">
-                  <div style="height:7px;background:var(--border);border-radius:3px;width:55%"></div>
-                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:100%"></div>
-                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:85%"></div>
-                  <div style="height:7px;background:var(--border);border-radius:3px;width:55%;margin-top:6px"></div>
-                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:92%"></div>
-                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:70%"></div>
-                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:80%"></div>
-                </div>
+              <div class="tpl-preview tpl-creative-split">
+              <div class="tpl-sidebar">
+                <div class="tpl-av">AK</div>
+                <div class="tpl-sl tpl-sl-md"></div>
+                <div class="tpl-sl tpl-sl-sm"></div>
+                <div class="tpl-sd"></div>
+                <div class="tpl-sl tpl-sl-md"></div>
+                <div class="tpl-sl tpl-sl-sm"></div>
+                <div class="tpl-sl tpl-sl-md"></div>
+                <div class="tpl-sd"></div>
+                <div class="tpl-sl tpl-sl-sm"></div>
+                <div class="tpl-sl tpl-sl-md"></div>
               </div>
+              <div class="tpl-main">
+                <div class="tpl-sec"></div>
+                <div class="tpl-ml tpl-ml-f"></div>
+                <div class="tpl-ml tpl-ml-m"></div>
+                <div class="tpl-ml tpl-ml-s"></div>
+                <div class="tpl-sec"></div>
+                <div class="tpl-ml tpl-ml-f"></div>
+                <div class="tpl-ml tpl-ml-m"></div>
+                <div class="tpl-sec"></div>
+                <div class="tpl-ml tpl-ml-m"></div>
+                <div class="tpl-ml tpl-ml-s"></div>
+              </div>
+            </div>
               <div class="tpl-overlay">
                 <a href="editor.html?t=creative-split" class="btn btn-gold btn-sm">✏️ Use Template</a>
                 <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'creative-split')">👁️ Preview</button>
@@ -649,26 +663,27 @@
           <!-- 4. Govt Formal -->
           <div class="tpl-card" data-category="govt" data-price="free" data-style="minimal" data-name="govt formal" data-ats="99">
             <div class="tpl-thumb">
-              <div class="tpl-preview" style="background:#fff">
-                <div style="border:2px solid var(--brand);border-radius:6px;padding:10px;height:100%;display:flex;flex-direction:column;gap:6px">
-                  <div style="text-align:center;border-bottom:2px solid var(--brand);padding-bottom:8px;margin-bottom:6px">
-                    <div style="height:11px;width:100px;background:var(--brand);border-radius:3px;margin:0 auto 5px"></div>
-                    <div style="height:7px;width:70px;background:var(--border);border-radius:3px;margin:0 auto 4px"></div>
-                    <div style="height:6px;width:90px;background:var(--bg-2);border-radius:3px;margin:0 auto"></div>
-                  </div>
-                  <div style="display:flex;justify-content:space-between;align-items:flex-start">
-                    <div style="flex:1;display:flex;flex-direction:column;gap:5px">
-                      <div style="height:6px;background:var(--border);border-radius:3px;width:55%"></div>
-                      <div style="height:5px;background:var(--bg-2);border-radius:3px"></div>
-                      <div style="height:5px;background:var(--bg-2);border-radius:3px;width:88%"></div>
-                    </div>
-                    <div style="width:42px;height:52px;background:var(--bg-2);border-radius:4px;border:1px solid var(--border);margin-left:10px"></div>
-                  </div>
-                  <div style="height:6px;background:var(--border);border-radius:3px;width:55%;margin-top:4px"></div>
-                  <div style="height:5px;background:var(--bg-2);border-radius:3px"></div>
-                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:78%"></div>
-                </div>
+              <div class="tpl-preview tpl-govt-formal">
+              <div class="tpl-center">
+                <div class="tpl-gl tpl-gl-w80"></div>
+                <div class="tpl-gl tpl-gl-w60"></div>
+                <div class="tpl-gl tpl-gl-w70"></div>
               </div>
+              <div class="tpl-row">
+                <div class="tpl-info">
+                  <div class="tpl-fl tpl-fl-m"></div>
+                  <div class="tpl-fl tpl-fl-f"></div>
+                  <div class="tpl-fl tpl-fl-s"></div>
+                </div>
+                <div class="tpl-photo"></div>
+              </div>
+              <div class="tpl-sec-t"></div>
+              <div class="tpl-fl tpl-fl-f"></div>
+              <div class="tpl-fl tpl-fl-m"></div>
+              <div class="tpl-sec-t"></div>
+              <div class="tpl-fl tpl-fl-f"></div>
+              <div class="tpl-fl tpl-fl-s"></div>
+            </div>
               <div class="tpl-overlay">
                 <a href="editor.html?t=govt-formal" class="btn btn-gold btn-sm">✏️ Use Template</a>
                 <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'govt-formal')">👁️ Preview</button>
@@ -684,30 +699,29 @@
           <!-- 5. Tech Dark -->
           <div class="tpl-card" data-category="tech" data-price="premium" data-style="dark" data-name="tech dark" data-ats="92">
             <div class="tpl-thumb">
-              <div class="tpl-preview" style="background:#0d1117;border-radius:8px;padding:12px">
-                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
-                  <div>
-                    <div style="height:11px;width:100px;background:#58a6ff;border-radius:3px;margin-bottom:5px"></div>
-                    <div style="height:7px;width:70px;background:rgba(88,166,255,0.4);border-radius:3px"></div>
-                  </div>
-                  <div style="width:36px;height:36px;border-radius:50%;background:#21262d;border:2px solid #30363d;display:flex;align-items:center;justify-content:center;color:#58a6ff;font-size:10px;font-weight:800">AT</div>
+              <div class="tpl-preview tpl-tech-dark">
+              <div class="tpl-top">
+                <div class="tpl-info">
+                  <div class="tpl-nm"></div>
+                  <div class="tpl-rl"></div>
                 </div>
-                <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap">
-                  <span style="background:#21262d;color:#58a6ff;font-size:7px;padding:2px 6px;border-radius:4px;border:1px solid #30363d">React</span>
-                  <span style="background:#21262d;color:#3fb950;font-size:7px;padding:2px 6px;border-radius:4px;border:1px solid #30363d">Node.js</span>
-                  <span style="background:#21262d;color:#d2a8ff;font-size:7px;padding:2px 6px;border-radius:4px;border:1px solid #30363d">Python</span>
-                  <span style="background:#21262d;color:#ffa657;font-size:7px;padding:2px 6px;border-radius:4px;border:1px solid #30363d">AWS</span>
-                </div>
-                <div style="height:1px;background:#21262d;margin-bottom:8px"></div>
-                <div style="display:flex;flex-direction:column;gap:5px">
-                  <div style="height:6px;background:#21262d;border-radius:3px;width:45%"></div>
-                  <div style="height:5px;background:#161b22;border-radius:3px;width:100%"></div>
-                  <div style="height:5px;background:#161b22;border-radius:3px;width:82%"></div>
-                  <div style="height:6px;background:#21262d;border-radius:3px;width:45%;margin-top:4px"></div>
-                  <div style="height:5px;background:#161b22;border-radius:3px;width:90%"></div>
-                  <div style="height:5px;background:#161b22;border-radius:3px;width:65%"></div>
-                </div>
+                <div class="tpl-av-circle">AT</div>
               </div>
+              <div class="tpl-chips">
+                <span class="tpl-chip tpl-chip-b">React</span>
+                <span class="tpl-chip tpl-chip-g">Node.js</span>
+                <span class="tpl-chip tpl-chip-p">Python</span>
+                <span class="tpl-chip tpl-chip-o">AWS</span>
+              </div>
+              <div class="tpl-div"></div>
+              <div class="tpl-sec"></div>
+              <div class="tpl-tl tpl-tl-f"></div>
+              <div class="tpl-tl tpl-tl-m"></div>
+              <div class="tpl-tl tpl-tl-s"></div>
+              <div class="tpl-sec"></div>
+              <div class="tpl-tl tpl-tl-f"></div>
+              <div class="tpl-tl tpl-tl-m"></div>
+            </div>
               <div class="tpl-overlay">
                 <a href="editor.html?t=tech-dark" class="btn btn-gold btn-sm">✏️ Use Template</a>
                 <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'tech-dark')">👁️ Preview</button>
@@ -724,21 +738,26 @@
           <!-- 6. Golden Line -->
           <div class="tpl-card" data-category="fresher" data-price="free" data-style="modern" data-name="golden line" data-ats="95">
             <div class="tpl-thumb">
-              <div class="tpl-preview" style="background:#fffdf7">
-                <div style="border-left:4px solid var(--gold);padding-left:12px;margin-bottom:12px">
-                  <div style="height:12px;width:110px;background:var(--brand-dark);border-radius:3px;margin-bottom:5px"></div>
-                  <div style="height:7px;width:70px;background:var(--gold);border-radius:3px;margin-bottom:4px"></div>
-                  <div style="height:6px;width:90px;background:var(--border);border-radius:3px"></div>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:7px">
-                  <div style="height:7px;background:var(--gold);border-radius:3px;width:42%;opacity:0.8"></div>
-                  <div style="height:5px;background:var(--border);border-radius:3px;width:100%"></div>
-                  <div style="height:5px;background:var(--border);border-radius:3px;width:78%"></div>
-                  <div style="height:7px;background:var(--gold);border-radius:3px;width:42%;opacity:0.8;margin-top:4px"></div>
-                  <div style="height:5px;background:var(--border);border-radius:3px;width:90%"></div>
-                  <div style="height:5px;background:var(--border);border-radius:3px;width:62%"></div>
+              <div class="tpl-preview tpl-golden-line">
+              <div class="tpl-header-row">
+                <div class="tpl-accent-bar"></div>
+                <div class="tpl-header-info">
+                  <div class="tpl-hn"></div>
+                  <div class="tpl-hr"></div>
+                  <div class="tpl-hc"></div>
                 </div>
               </div>
+              <div class="tpl-sec"><div class="tpl-sec-bar"></div><div class="tpl-sec-text"></div></div>
+              <div class="tpl-gl tpl-gl-f"></div>
+              <div class="tpl-gl tpl-gl-m"></div>
+              <div class="tpl-sec"><div class="tpl-sec-bar"></div><div class="tpl-sec-text"></div></div>
+              <div class="tpl-gl tpl-gl-f"></div>
+              <div class="tpl-gl tpl-gl-s"></div>
+              <div class="tpl-gl tpl-gl-m"></div>
+              <div class="tpl-sec"><div class="tpl-sec-bar"></div><div class="tpl-sec-text"></div></div>
+              <div class="tpl-gl tpl-gl-m"></div>
+              <div class="tpl-gl tpl-gl-s"></div>
+            </div>
               <div class="tpl-overlay">
                 <a href="editor.html?t=golden-line" class="btn btn-gold btn-sm">✏️ Use Template</a>
                 <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'golden-line')">👁️ Preview</button>
@@ -754,22 +773,26 @@
           <!-- 7. Corporate Blue -->
           <div class="tpl-card" data-category="experienced" data-price="free" data-style="modern" data-name="corporate blue" data-ats="97">
             <div class="tpl-thumb">
-              <div class="tpl-preview" style="background:#fff">
-                <div style="background:linear-gradient(90deg,var(--brand-dark),var(--brand-light));height:48px;border-radius:8px 8px 0 0;display:flex;align-items:flex-end;padding:10px 14px;margin:-16px -16px 12px;border-radius:0">
-                  <div>
-                    <div style="height:10px;width:100px;background:rgba(255,255,255,0.9);border-radius:3px;margin-bottom:4px"></div>
-                    <div style="height:6px;width:65px;background:rgba(255,255,255,0.4);border-radius:3px"></div>
-                  </div>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:6px">
-                  <div style="height:7px;background:var(--brand-xlight);border-radius:3px;width:42%;border-left:3px solid var(--brand)"></div>
-                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:100%"></div>
-                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:84%"></div>
-                  <div style="height:7px;background:var(--brand-xlight);border-radius:3px;width:42%;border-left:3px solid var(--brand);margin-top:5px"></div>
-                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:96%"></div>
-                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:72%"></div>
+              <div class="tpl-preview tpl-corporate-blue">
+              <div class="tpl-banner">
+                <div>
+                  <div class="tpl-bn"></div>
+                  <div class="tpl-br"></div>
                 </div>
               </div>
+              <div class="tpl-body">
+                <div class="tpl-sec"><div class="tpl-sec-left"></div><div class="tpl-sec-text"></div></div>
+                <div class="tpl-cl tpl-cl-f"></div>
+                <div class="tpl-cl tpl-cl-m"></div>
+                <div class="tpl-sec"><div class="tpl-sec-left"></div><div class="tpl-sec-text"></div></div>
+                <div class="tpl-cl tpl-cl-f"></div>
+                <div class="tpl-cl tpl-cl-s"></div>
+                <div class="tpl-cl tpl-cl-m"></div>
+                <div class="tpl-sec"><div class="tpl-sec-left"></div><div class="tpl-sec-text"></div></div>
+                <div class="tpl-cl tpl-cl-m"></div>
+                <div class="tpl-cl tpl-cl-s"></div>
+              </div>
+            </div>
               <div class="tpl-overlay">
                 <a href="editor.html?t=corporate-blue" class="btn btn-gold btn-sm">✏️ Use Template</a>
                 <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'corporate-blue')">👁️ Preview</button>
@@ -785,24 +808,26 @@
           <!-- 8. Midnight Gold -->
           <div class="tpl-card" data-category="creative" data-price="premium" data-style="dark" data-name="midnight gold" data-ats="89">
             <div class="tpl-thumb">
-              <div class="tpl-preview" style="background:linear-gradient(160deg,#1a1a2e,#16213e)">
-                <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-                  <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;color:#1a1a2e;font-weight:800;font-size:13px;flex-shrink:0">AK</div>
-                  <div>
-                    <div style="height:10px;width:90px;background:var(--gold);border-radius:3px;margin-bottom:5px"></div>
-                    <div style="height:6px;width:65px;background:rgba(245,166,35,0.4);border-radius:3px"></div>
-                  </div>
-                </div>
-                <div style="height:1px;background:rgba(245,166,35,0.2);margin-bottom:10px"></div>
-                <div style="display:flex;flex-direction:column;gap:6px">
-                  <div style="height:7px;background:rgba(245,166,35,0.5);border-radius:3px;width:42%"></div>
-                  <div style="height:5px;background:rgba(255,255,255,0.07);border-radius:3px;width:100%"></div>
-                  <div style="height:5px;background:rgba(255,255,255,0.07);border-radius:3px;width:78%"></div>
-                  <div style="height:7px;background:rgba(245,166,35,0.5);border-radius:3px;width:42%;margin-top:4px"></div>
-                  <div style="height:5px;background:rgba(255,255,255,0.07);border-radius:3px;width:88%"></div>
-                  <div style="height:5px;background:rgba(255,255,255,0.07);border-radius:3px;width:60%"></div>
+              <div class="tpl-preview tpl-midnight-gold">
+              <div class="tpl-top">
+                <div class="tpl-av">AK</div>
+                <div>
+                  <div class="tpl-mn"></div>
+                  <div class="tpl-mr"></div>
                 </div>
               </div>
+              <div class="tpl-gd"></div>
+              <div class="tpl-sec"></div>
+              <div class="tpl-ml tpl-ml-f"></div>
+              <div class="tpl-ml tpl-ml-m"></div>
+              <div class="tpl-ml tpl-ml-s"></div>
+              <div class="tpl-sec"></div>
+              <div class="tpl-ml tpl-ml-f"></div>
+              <div class="tpl-ml tpl-ml-m"></div>
+              <div class="tpl-sec"></div>
+              <div class="tpl-ml tpl-ml-m"></div>
+              <div class="tpl-ml tpl-ml-s"></div>
+            </div>
               <div class="tpl-overlay">
                 <a href="editor.html?t=midnight-gold" class="btn btn-gold btn-sm">✏️ Use Template</a>
                 <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'midnight-gold')">👁️ Preview</button>
@@ -819,23 +844,25 @@
           <!-- 9. Medical White -->
           <div class="tpl-card" data-category="healthcare" data-price="free" data-style="minimal" data-name="medical white" data-ats="98">
             <div class="tpl-thumb">
-              <div class="tpl-preview" style="background:#fff">
-                <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:10px;border-bottom:2px solid #e0f2fe">
-                  <div style="width:40px;height:40px;border-radius:8px;background:#0ea5e9;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:13px">+</div>
-                  <div>
-                    <div style="height:10px;width:90px;background:#0c4a6e;border-radius:3px;margin-bottom:5px"></div>
-                    <div style="height:6px;width:60px;background:#7dd3fc;border-radius:3px"></div>
-                  </div>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:6px">
-                  <div style="height:7px;background:#bae6fd;border-radius:3px;width:45%"></div>
-                  <div style="height:5px;background:#f0f9ff;border-radius:3px;width:100%;border:1px solid #e0f2fe"></div>
-                  <div style="height:5px;background:#f0f9ff;border-radius:3px;width:80%;border:1px solid #e0f2fe"></div>
-                  <div style="height:7px;background:#bae6fd;border-radius:3px;width:45%;margin-top:4px"></div>
-                  <div style="height:5px;background:#f0f9ff;border-radius:3px;width:92%;border:1px solid #e0f2fe"></div>
-                  <div style="height:5px;background:#f0f9ff;border-radius:3px;width:68%;border:1px solid #e0f2fe"></div>
+              <div class="tpl-preview tpl-medical-white">
+              <div class="tpl-top">
+                <div class="tpl-cross">+</div>
+                <div>
+                  <div class="tpl-mn"></div>
+                  <div class="tpl-mr"></div>
                 </div>
               </div>
+              <div class="tpl-sec"></div>
+              <div class="tpl-ml tpl-ml-f"></div>
+              <div class="tpl-ml tpl-ml-m"></div>
+              <div class="tpl-sec"></div>
+              <div class="tpl-ml tpl-ml-f"></div>
+              <div class="tpl-ml tpl-ml-s"></div>
+              <div class="tpl-ml tpl-ml-m"></div>
+              <div class="tpl-sec"></div>
+              <div class="tpl-ml tpl-ml-m"></div>
+              <div class="tpl-ml tpl-ml-s"></div>
+            </div>
               <div class="tpl-overlay">
                 <a href="editor.html?t=medical-white" class="btn btn-gold btn-sm">✏️ Use Template</a>
                 <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'medical-white')">👁️ Preview</button>
@@ -851,25 +878,29 @@
           <!-- 10. Bold Modern -->
           <div class="tpl-card" data-category="fresher" data-price="premium" data-style="colorful" data-name="bold modern" data-ats="91">
             <div class="tpl-thumb">
-              <div class="tpl-preview" style="background:#fff">
-                <div style="background:linear-gradient(135deg,#7c3aed,#4f46e5);padding:14px;margin:-16px -16px 12px;display:flex;align-items:center;gap:10px">
-                  <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:12px">SK</div>
-                  <div>
-                    <div style="height:9px;width:85px;background:rgba(255,255,255,0.85);border-radius:3px;margin-bottom:4px"></div>
-                    <div style="height:6px;width:60px;background:rgba(255,255,255,0.4);border-radius:3px"></div>
-                  </div>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:6px">
-                  <div style="height:7px;background:#ede9fe;border-radius:3px;width:42%;border-left:3px solid #7c3aed"></div>
-                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:100%"></div>
-                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:76%"></div>
-                  <div style="display:flex;gap:4px;margin-top:4px">
-                    <span style="background:#ede9fe;color:#7c3aed;font-size:7px;padding:2px 6px;border-radius:4px">Design</span>
-                    <span style="background:#ede9fe;color:#7c3aed;font-size:7px;padding:2px 6px;border-radius:4px">Figma</span>
-                    <span style="background:#ede9fe;color:#7c3aed;font-size:7px;padding:2px 6px;border-radius:4px">UI/UX</span>
-                  </div>
+              <div class="tpl-preview tpl-bold-modern">
+              <div class="tpl-header">
+                <div class="tpl-av">SK</div>
+                <div>
+                  <div class="tpl-mn"></div>
+                  <div class="tpl-mr"></div>
                 </div>
               </div>
+              <div class="tpl-body">
+                <div class="tpl-chips">
+                  <span class="tpl-chip">Design</span>
+                  <span class="tpl-chip">Figma</span>
+                  <span class="tpl-chip">UI/UX</span>
+                </div>
+                <div class="tpl-sec"></div>
+                <div class="tpl-bl tpl-bl-f"></div>
+                <div class="tpl-bl tpl-bl-m"></div>
+                <div class="tpl-sec"></div>
+                <div class="tpl-bl tpl-bl-f"></div>
+                <div class="tpl-bl tpl-bl-s"></div>
+                <div class="tpl-bl tpl-bl-m"></div>
+              </div>
+            </div>
               <div class="tpl-overlay">
                 <a href="editor.html?t=bold-modern" class="btn btn-gold btn-sm">✏️ Use Template</a>
                 <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'bold-modern')">👁️ Preview</button>
@@ -885,22 +916,25 @@
           <!-- 11. Minimal Classic -->
           <div class="tpl-card" data-category="experienced" data-price="free" data-style="minimal" data-name="minimal classic" data-ats="99">
             <div class="tpl-thumb">
-              <div class="tpl-preview" style="background:#fff">
-                <div style="text-align:center;padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--border)">
-                  <div style="height:12px;width:120px;background:var(--brand-dark);border-radius:3px;margin:0 auto 6px"></div>
-                  <div style="height:7px;width:80px;background:var(--border);border-radius:3px;margin:0 auto 4px"></div>
-                  <div style="height:6px;width:100px;background:var(--bg-2);border-radius:3px;margin:0 auto"></div>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:6px">
-                  <div style="height:7px;background:var(--brand-dark);border-radius:1px;width:100%;opacity:0.15"></div>
-                  <div style="height:7px;background:var(--border);border-radius:3px;width:38%"></div>
-                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:100%"></div>
-                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:82%"></div>
-                  <div style="height:7px;background:var(--brand-dark);border-radius:1px;width:100%;opacity:0.15;margin-top:4px"></div>
-                  <div style="height:7px;background:var(--border);border-radius:3px;width:38%"></div>
-                  <div style="height:5px;background:var(--bg-2);border-radius:3px;width:90%"></div>
-                </div>
+              <div class="tpl-preview tpl-minimal-classic">
+              <div class="tpl-center">
+                <div class="tpl-mn"></div>
+                <div class="tpl-mr"></div>
+                <div class="tpl-mc"><span></span><span></span><span></span></div>
               </div>
+              <div class="tpl-divider"></div>
+              <div class="tpl-sec"></div>
+              <div class="tpl-ml tpl-ml-f"></div>
+              <div class="tpl-ml tpl-ml-m"></div>
+              <div class="tpl-divider"></div>
+              <div class="tpl-sec"></div>
+              <div class="tpl-ml tpl-ml-f"></div>
+              <div class="tpl-ml tpl-ml-s"></div>
+              <div class="tpl-ml tpl-ml-m"></div>
+              <div class="tpl-divider"></div>
+              <div class="tpl-sec"></div>
+              <div class="tpl-ml tpl-ml-m"></div>
+            </div>
               <div class="tpl-overlay">
                 <a href="editor.html?t=minimal-classic" class="btn btn-gold btn-sm">✏️ Use Template</a>
                 <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'minimal-classic')">👁️ Preview</button>
@@ -917,23 +951,27 @@
           <!-- 12. Saffron Bold -->
           <div class="tpl-card" data-category="creative" data-price="premium" data-style="colorful" data-name="saffron bold" data-ats="87">
             <div class="tpl-thumb">
-              <div class="tpl-preview" style="background:#fff8f0">
-                <div style="background:linear-gradient(135deg,#ea580c,#f97316);padding:14px;margin:-16px -16px 12px;display:flex;justify-content:space-between;align-items:center">
-                  <div>
-                    <div style="height:10px;width:90px;background:rgba(255,255,255,0.9);border-radius:3px;margin-bottom:4px"></div>
-                    <div style="height:6px;width:60px;background:rgba(255,255,255,0.4);border-radius:3px"></div>
-                  </div>
-                  <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:12px">RK</div>
+              <div class="tpl-preview tpl-saffron-bold">
+              <div class="tpl-header">
+                <div class="tpl-info">
+                  <div class="tpl-mn"></div>
+                  <div class="tpl-mr"></div>
                 </div>
-                <div style="display:flex;flex-direction:column;gap:6px">
-                  <div style="height:7px;background:#fed7aa;border-radius:3px;width:44%"></div>
-                  <div style="height:5px;background:#fff7ed;border-radius:3px;width:100%;border:1px solid #fed7aa"></div>
-                  <div style="height:5px;background:#fff7ed;border-radius:3px;width:74%;border:1px solid #fed7aa"></div>
-                  <div style="height:7px;background:#fed7aa;border-radius:3px;width:44%;margin-top:4px"></div>
-                  <div style="height:5px;background:#fff7ed;border-radius:3px;width:88%;border:1px solid #fed7aa"></div>
-                  <div style="height:5px;background:#fff7ed;border-radius:3px;width:65%;border:1px solid #fed7aa"></div>
-                </div>
+                <div class="tpl-av">RK</div>
               </div>
+              <div class="tpl-body">
+                <div class="tpl-sec"></div>
+                <div class="tpl-sl tpl-sl-f"></div>
+                <div class="tpl-sl tpl-sl-m"></div>
+                <div class="tpl-sec"></div>
+                <div class="tpl-sl tpl-sl-f"></div>
+                <div class="tpl-sl tpl-sl-s"></div>
+                <div class="tpl-sl tpl-sl-m"></div>
+                <div class="tpl-sec"></div>
+                <div class="tpl-sl tpl-sl-m"></div>
+                <div class="tpl-sl tpl-sl-s"></div>
+              </div>
+            </div>
               <div class="tpl-overlay">
                 <a href="editor.html?t=saffron-bold" class="btn btn-gold btn-sm">✏️ Use Template</a>
                 <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3)" onclick="openPreview(event,'saffron-bold')">👁️ Preview</button>
