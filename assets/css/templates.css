@@ -444,3 +444,39 @@
   height: 100%;
   min-height: 400px;
 }
+
+/* ══ Critical — Make templates fill full height ══ */
+.tpl-thumb {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* All template classes fill full space */
+.t-clean,.t-dark,.t-split,.t-govt,.t-tech,
+.t-gold,.t-corp,.t-mid,.t-med,.t-bold,
+.t-min,.t-saff,.t-navy,.t-grn,.t-pink,.t-teal {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Split templates need row direction */
+.t-split, .t-navy {
+  flex-direction: row !important;
+}
+
+/* sp = spacer fills remaining space */
+.sp { flex: 1 !important; }
+
+/* govt bx fills full */
+.t-govt .bx {
+  flex: 1 !important;
+  overflow: hidden !important;
+}
+
+/* flex-1 utility */
+.flex-1 { flex: 1; }
